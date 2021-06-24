@@ -1,4 +1,4 @@
-package com.techllenapps.cardealershipconsoleapp.users;
+package com.techllenapps.cardealershipconsoleapp.entities;
 
 public class User {
 	
