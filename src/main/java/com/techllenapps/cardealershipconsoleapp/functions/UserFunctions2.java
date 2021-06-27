@@ -1,49 +1,37 @@
 package com.techllenapps.cardealershipconsoleapp.functions;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Scanner;
 import com.techllenapps.cardealershipconsoleapp.entities.User;
 
-public class UserFunctions extends User{
+public class UserFunctions2 extends User{
 
 	private static final long serialVersionUID = 1L;
 	Scanner scan = new Scanner(System.in);
 	User user = new User();
 	HashMap<String, String> allUsersMap = new HashMap<String, String>();
-	//ArrayList<HashMap<String, String>> allUsersList = new ArrayList<HashMap<String,String>>();
 	FileOutputStream fout;
 	FileInputStream fin;
+	HashMap<String, String> retrievedUsers = new HashMap<String, String>();
+
 
 	public void login() throws IOException, ClassNotFoundException {
 
-		//		System.out.println("*****************************************************\n");
-		//		System.out.println("Please enter your username and password to login");
-		//		System.out.println("\n****************************************************");
-		//		System.out.println("Username:");
-		//		String enteredUserName = scan.nextLine();
-		//		user.setUserName(enteredUserName);
-		//		System.out.println("Password:");
-		//		String enteredPassCode = scan.nextLine();
-		//		user.setPassWord(enteredPassCode);
-		//		//assign passcode and username to the hashmap as key value respectively
-		//		users.put(user.getPassWord(), user.getUserName());
-		//		//serialising the user credentials for persistence
-		//ArrayList<HashMap<String, String>> retrievedUsers = new ArrayList<HashMap<String, String>>();
-		//HashMap<String, String> retrievedUsers = new HashMap<String, String>();
-		fin = new FileInputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
+		
+		fin = new FileInputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt");
 		ObjectInputStream in = new ObjectInputStream(fin);
 			//retrievedUsers = (ArrayList<HashMap<String, String>>)in.readObject();
 			Object obj = null;
 			while(fin.available()>0) {
-			//retrievedUsers = (HashMap<String, String>)in.readObject();
-			//System.out.println(retrievedUsers);
-				System.out.println((Object)in.readObject());
+			retrievedUsers = (HashMap<String, String>)in.readObject();
+			System.out.println(retrievedUsers);
+				//System.out.println(in.readObject());
 			}
 			in.close();
 		//boolean available = false;
@@ -65,9 +53,11 @@ public class UserFunctions extends User{
 		//adding the users hashmap to the arraylist
 		//allUsersList.add(allUsersMap);
 		//serialising the user credentials for persistence
-		try {
-			fout = new FileOutputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser",true);
-			ObjectOutputStream out = new ObjectOutputStream(fout);
+		File file = new File("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt");
+		boolean append = file.exists();
+				try {
+			fout = new FileOutputStream(file,append);
+			AppendingObjectOutputStream out = new AppendingObjectOutputStream(fout);
 			out.writeObject(allUsersMap);
 			System.out.println("\n SAVED!!!!");
 			out.close();

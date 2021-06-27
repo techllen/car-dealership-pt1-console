@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 public class Driver{
 
-	public static void main(String[] args) throws IOException {
-		UserFunctions usroperation = new UserFunctions();
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		UserFunctions2 usroperation = new UserFunctions2();
 		boolean stickMenu = true;
 		//receiving keyboard input
 		Scanner scan = new Scanner(System.in);
