@@ -9,12 +9,19 @@ public class User implements Serializable {
 	private String userRole;
 	private enum UserRole{Admin,Customer,Employee};
 	
+	public User(String userName, String passWord) {
+		super();
+		this.userName = userName;
+		this.passWord = passWord;
+	}
+	
 	public String getUserName() {
 		return userName;
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
 	public String getPassWord() {
 		return passWord;
 	}
