@@ -4,17 +4,19 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private String userName;
 	private String passWord;
 	private String userRole;
 	private enum UserRole{Admin,Customer,Employee};
+	
+	
 	
 	public User(String userName, String passWord) {
 		super();
 		this.userName = userName;
 		this.passWord = passWord;
 	}
-	
 	public String getUserName() {
 		return userName;
 	}
