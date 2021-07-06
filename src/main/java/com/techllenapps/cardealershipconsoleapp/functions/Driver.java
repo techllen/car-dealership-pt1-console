@@ -12,22 +12,25 @@ public class Driver{
 		//receiving keyboard input
 		Scanner scan = new Scanner(System.in);
 		
-		while(true) {
+		while(stickMenu) {
 			System.out.println("****************************************************************\n");
 			System.out.println("Wellcome to the Car Dealesrhip Console Application Ver 1.01\n");
-			System.out.println("This is a simple console based Java App for learning purposes");
+			System.out.println("This is a simple console based Java App for learning purposes\n");
 			System.out.println("****************************************************************");
 			System.out.println("Please select 1 to log in as Admin or 2 to log in as Customer/Employee");
-			//the administrator will assign employees and their roles
+			//the administrator will assign employees and their roles as well as view appplication logs
 			System.out.println("1.Administrator");
 			System.out.println("2.User(Customer/Employee)\n");
 			int typeOfEmployeeChoice = scan.nextInt();
 			
 			switch (typeOfEmployeeChoice) {
 			case 1:
-				//implement Admini menu
+				//implement Admini functions which will contain admini menu and check system logs function
 				//adminiMenu();
 				//checkSystemLogs();
+				usroperation.register();
+				usroperation.login();
+				
 				break;
 				
 			case 2:
@@ -70,7 +73,7 @@ public class Driver{
 //			}
 		}
 		
-		scan.close();
+		//scan.close();
 	}
 }
 

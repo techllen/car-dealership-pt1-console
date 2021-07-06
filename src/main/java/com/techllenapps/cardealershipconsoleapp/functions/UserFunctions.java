@@ -1,19 +1,31 @@
 package com.techllenapps.cardealershipconsoleapp.functions;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
 import com.techllenapps.cardealershipconsoleapp.entities.User;
 
-public class UserFunctions {
+public class UserFunctions implements Serializable{
+	//serial version ID is named as per today's date and time
+	 private static final long serialVersionUID = 2021_07_05__19_58L;
 
-	private static final long serialVersionUID = 1L;
-	Scanner scan = new Scanner(System.in);
-	ArrayList<User> allUsersList = new ArrayList<User>();
+
+	static class UserList implements Serializable {
+		//serial version ID is named as per today's date and time
+		 private static final long serialVersionUID = 2021_07_05__20_00L;
+        List<User> list = new ArrayList<>();
+}
 
 	public void login() throws IOException, ClassNotFoundException {
 		ArrayList<User> retrievedAllUsersList = new ArrayList<User>();
@@ -32,7 +44,7 @@ public class UserFunctions {
 		//		//serialising the user credentials for persistence
 		//ArrayList<HashMap<String, String>> retrievedUsers = new ArrayList<HashMap<String, String>>();
 		//HashMap<String, String> retrievedUsers = new HashMap<String, String>();
-		FileInputStream fin = new FileInputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt");
+		FileInputStream fin = new FileInputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
 		ObjectInputStream in = new ObjectInputStream(fin);
 		retrievedAllUsersList = (ArrayList<User>)in.readObject();
 		//iterating through a list to get the user
@@ -49,26 +61,29 @@ public class UserFunctions {
 	}
 
 	public  void register() throws IOException, ClassNotFoundException {
-		System.out.println("*****************************************************\n");
-		System.out.println("Please enter your username and password to register");
-		System.out.println("\n****************************************************");
-		System.out.println("Username:");
-		String registeredUserName = scan.nextLine();
-		//user.setUserName(registeredUserName);
-		System.out.println("Password:");
-		String passcode = scan.nextLine();
-		//user.setPassWord(passcode);
-		//adding the users to the arraylist
-		allUsersList.add(new User(passcode,registeredUserName));
-		allUsersList.add(new User(passcode,registeredUserName));
-		allUsersList.add(new User(passcode,registeredUserName));
-		//serialising the user credentials for persistence
-		FileOutputStream fout = new FileOutputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt",true);
-		ObjectOutputStream out = new ObjectOutputStream(fout);
-		out.writeObject(allUsersList);
-		System.out.println(allUsersList.size());
-		System.out.println("\nSAVED!!!!");
-		out.close();
-		fout.close();
+		File file = new File("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
+		//FileList list = new FileList();
+		UserList users = new UserList();
+		Scanner scn = new Scanner(System.in);
+		while (true) {
+			System.out.println("*****************************************************\n");
+			System.out.println("Please enter your username and password to register");
+			System.out.println("\n****************************************************");
+			Scanner in = new Scanner(System.in);
+			System.out.println("Username");
+			String name = in.nextLine();
+			System.out.println("Password");
+			String passcode = in.nextLine();
+
+			//list.list.add(new FileData());
+			users.list.add(new User(name,passcode));
+			File tmp = new File("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
+			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(tmp))) {
+				oos.writeObject(users);
+			}
+			Files.move(tmp.toPath(), file.toPath(), REPLACE_EXISTING);
+			System.out.println("User Added");
+			break;
+		}
 	}
 }
