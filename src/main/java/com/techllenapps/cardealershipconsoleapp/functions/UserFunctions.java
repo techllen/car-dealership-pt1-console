@@ -24,8 +24,15 @@ public class UserFunctions implements Serializable{
 	static class UserList implements Serializable {
 		//serial version ID is named as per today's date and time
 		 private static final long serialVersionUID = 2021_07_05__20_00L;
-        List<User> list = new ArrayList<>();
+        ArrayList<User> list = new ArrayList<User>();
+        
+        @Override
+ 	   public String toString() {
+ 	       return String.valueOf(list);
+ 	   }
 }
+	
+	
 
 	public void login() throws IOException, ClassNotFoundException {
 		ArrayList<User> retrievedAllUsersList = new ArrayList<User>();
@@ -46,16 +53,22 @@ public class UserFunctions implements Serializable{
 		//HashMap<String, String> retrievedUsers = new HashMap<String, String>();
 		FileInputStream fin = new FileInputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
 		ObjectInputStream in = new ObjectInputStream(fin);
-		retrievedAllUsersList = (ArrayList<User>)in.readObject();
+		Object retrievedUserListObject = new Object();
+		retrievedUserListObject=(UserList)in.readObject();
+		//UserList retrievedUser = new UserList();
+		//retrievedAllUsersList = (Object)in.readObject();
 		//iterating through a list to get the user
 		//System.out.println(retrievedAllUsersList);
 //		for(int c=0;c<retrievedAllUsersList.size();c++){
 //			System.out.println(retrievedAllUsersList.get(c));
 //			System.out.println(retrievedAllUsersList.size());
 //		}
-		for (User user : retrievedAllUsersList) {
-			System.out.println(user);
-		}
+//		for (User user : retrievedAllUsersList) {
+//			System.out.println(user);
+//		}
+		 
+		 
+		System.out.println(retrievedUserListObject.toString());
 		in.close();
 		fin.close();
 	}
