@@ -20,7 +20,7 @@ public class UserFunctions3 extends User{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID =  202107051958L;
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub
@@ -36,29 +36,30 @@ public class UserFunctions3 extends User{
 
 	public static void setObject(String name, String passcode) throws IOException {
 		User usr1=new User("Matare","Mwita");
-		User usr2=new User("Matare","Allen");
-		User usr3=new User("Matare","Kikula");
-		User usr4=new User("Kilo","Majili");
-		//User usr=new User(name,passcode);
+//		User usr2=new User("Matare","Allen");
+//		User usr3=new User("Matare","Kikula");
+//		User usr4=new User("Kilo","Majili");
+		User usr=new User(name,passcode);
 
 		
 		ArrayList<User> woi=new ArrayList<User>();
 
 		
 		woi.add(usr1);
-		woi.add(usr2);
-		woi.add(usr3);
-		woi.add(usr4);
+//		woi.add(usr2);
+//		woi.add(usr3);
+//		woi.add(usr4);
 		woi.add(new User(name,passcode));
 
-		FileOutputStream fop=new FileOutputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
+		FileOutputStream fop=new FileOutputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt");
 		ObjectOutputStream oos=new ObjectOutputStream(fop);
 		oos.writeObject(woi);	
 	}
 
+
 	public static void getObject() throws IOException, ClassNotFoundException { 
 		try {
-			FileInputStream fis=new FileInputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
+			FileInputStream fis=new FileInputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt");
 			ObjectInputStream ois=new ObjectInputStream(fis);
 
 
