@@ -24,21 +24,24 @@ public class UserFunctions3 extends User{
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub
+while(true) {
 		Scanner in = new Scanner(System.in);
 		System.out.println("Username");
 		String name = in.nextLine();
 		System.out.println("Password");
 		String passcode = in.nextLine();
 		setObject(name,passcode);
-		getObject();
+		//getObject();
+}
 
 	}
 
-	public static void setObject(String name, String passcode) throws IOException {
-		User usr1=new User("Matare","Mwita");
-//		User usr2=new User("Matare","Allen");
-//		User usr3=new User("Matare","Kikula");
-//		User usr4=new User("Kilo","Majili");
+	public static void setObject(String name, String passcode) throws IOException, ClassNotFoundException {
+		ArrayList<User> retrList = getObject();
+		System.out.println(retrList);
+
+	    User usr1=new User("Admin","Admin");
+
 		User usr=new User(name,passcode);
 
 		
@@ -46,10 +49,11 @@ public class UserFunctions3 extends User{
 
 		
 		woi.add(usr1);
-//		woi.add(usr2);
-//		woi.add(usr3);
-//		woi.add(usr4);
-		woi.add(new User(name,passcode));
+		woi=removeDuplicates(woi);
+		retrList.add(usr);
+		woi.addAll(retrList);
+		
+		
 
 		FileOutputStream fop=new FileOutputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt");
 		ObjectOutputStream oos=new ObjectOutputStream(fop);
@@ -57,7 +61,7 @@ public class UserFunctions3 extends User{
 	}
 
 
-	public static void getObject() throws IOException, ClassNotFoundException { 
+	public static ArrayList<User> getObject() throws IOException, ClassNotFoundException { 
 		try {
 			FileInputStream fis=new FileInputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt");
 			ObjectInputStream ois=new ObjectInputStream(fis);
@@ -69,8 +73,28 @@ public class UserFunctions3 extends User{
 			
 			for(int i=0;i<userList.size();i++){
 				System.out.println(userList.get(i));
+				System.out.println(userList.size());
+
 			}
+			return userList;
 		} finally {}
 	}
+	//method to remove arraylist
+	public static ArrayList<User> removeDuplicates(ArrayList<User> list)
+    {
+  
+        // Create a new ArrayList
+        ArrayList<User> newList = new ArrayList<User>();
+  
+        // Traverse through the first list
+        
+        for (User user : newList) {
+        	if (!newList.contains(user)) {
+                newList.add(user);
+            }	
+		}
+        // return the new list
+        return newList;
+    }
 
 }
