@@ -7,13 +7,14 @@ import java.util.Scanner;
 public class Driver{
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		UserFunctions usroperation = new UserFunctions();
+		UserFunctions usrOperation = new UserFunctions();
 		boolean stickMenu = true;
-		//receiving keyboard input
 		Scanner scan = new Scanner(System.in);
-		
-		while(stickMenu) {
-			System.out.println("****************************************************************\n");
+		//default method to register the administrator
+		boolean adminExist = usrOperation.registerAdministrator();
+		//run the program if and only iff we have admini registered 
+		while((stickMenu) && (adminExist)) {
+			System.out.println("****************************************************************");
 			System.out.println("Wellcome to the Car Dealesrhip Console Application Ver 1.01\n");
 			System.out.println("This is a simple console based Java App for learning purposes\n");
 			System.out.println("****************************************************************");
@@ -21,15 +22,12 @@ public class Driver{
 			//the administrator will assign employees and their roles as well as view appplication logs
 			System.out.println("1.Administrator");
 			System.out.println("2.User(Customer/Employee)\n");
+			
 			int typeOfEmployeeChoice = scan.nextInt();
 			
 			switch (typeOfEmployeeChoice) {
 			case 1:
-				//implement Admini functions which will contain admini menu and check system logs function
-				//adminiMenu();
-				//checkSystemLogs();
-				usroperation.register();
-				usroperation.login();
+				
 				
 				break;
 				

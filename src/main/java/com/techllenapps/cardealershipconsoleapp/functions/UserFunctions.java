@@ -1,102 +1,83 @@
 package com.techllenapps.cardealershipconsoleapp.functions;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import com.techllenapps.cardealershipconsoleapp.entities.User;
 
-public class UserFunctions implements Serializable{
-	//serial version ID is named as per today's date and time
-	 private static final long serialVersionUID = 2021_07_05__19_58L;
-
-
-	static class UserList implements Serializable {
-		//serial version ID is named as per today's date and time
-		 private static final long serialVersionUID = 2021_07_05__20_00L;
-        ArrayList<User> list = new ArrayList<User>();
-        
-        @Override
- 	   public String toString() {
- 	       return String.valueOf(list);
- 	   }
-}
-	
+public class UserFunctions extends User{
+	private static final long serialVersionUID =  202107051958L;
+	public static String filePath = "//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt";
+	Scanner scan = new Scanner(System.in);
 	
 
-	public void login() throws IOException, ClassNotFoundException {
-		ArrayList<User> retrievedAllUsersList = new ArrayList<User>();
-
-		//		System.out.println("*****************************************************\n");
-		//		System.out.println("Please enter your username and password to login");
-		//		System.out.println("\n****************************************************");
-		//		System.out.println("Username:");
-		//		String enteredUserName = scan.nextLine();
-		//		user.setUserName(enteredUserName);
-		//		System.out.println("Password:");
-		//		String enteredPassCode = scan.nextLine();
-		//		user.setPassWord(enteredPassCode);
-		//		//assign passcode and username to the hashmap as key value respectively
-		//		users.put(user.getPassWord(), user.getUserName());
-		//		//serialising the user credentials for persistence
-		//ArrayList<HashMap<String, String>> retrievedUsers = new ArrayList<HashMap<String, String>>();
-		//HashMap<String, String> retrievedUsers = new HashMap<String, String>();
-		FileInputStream fin = new FileInputStream("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
-		ObjectInputStream in = new ObjectInputStream(fin);
-		Object retrievedUserListObject = new Object();
-		retrievedUserListObject=(UserList)in.readObject();
-		//UserList retrievedUser = new UserList();
-		//retrievedAllUsersList = (Object)in.readObject();
-		//iterating through a list to get the user
-		//System.out.println(retrievedAllUsersList);
-//		for(int c=0;c<retrievedAllUsersList.size();c++){
-//			System.out.println(retrievedAllUsersList.get(c));
-//			System.out.println(retrievedAllUsersList.size());
-//		}
-//		for (User user : retrievedAllUsersList) {
-//			System.out.println(user);
-//		}
-		 
-		 
-		System.out.println(retrievedUserListObject.toString());
-		in.close();
-		fin.close();
+	//default method to create an admin
+	public boolean registerAdministrator() throws IOException{
+		ArrayList<User> firstUserList = new ArrayList<User>();
+		//setting administrator as first user
+		User firstUser =new User("Admin","Admin","Administrator");
+		firstUserList.add(firstUser);
+		FileOutputStream fop=new FileOutputStream(filePath);
+		ObjectOutputStream oos=new ObjectOutputStream(fop);
+		oos.writeObject(firstUserList);
+		boolean administratorAlredySet = true;
+		return administratorAlredySet;
 	}
 
-	public  void register() throws IOException, ClassNotFoundException {
-		File file = new File("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
-		//FileList list = new FileList();
-		UserList users = new UserList();
-		Scanner scn = new Scanner(System.in);
-		while (true) {
-			System.out.println("*****************************************************\n");
-			System.out.println("Please enter your username and password to register");
-			System.out.println("\n****************************************************");
-			Scanner in = new Scanner(System.in);
-			System.out.println("Username");
-			String name = in.nextLine();
-			System.out.println("Password");
-			String passcode = in.nextLine();
 
-			//list.list.add(new FileData());
-			users.list.add(new User(name,passcode));
-			File tmp = new File("//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.ser");
-			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(tmp))) {
-				oos.writeObject(users);
-			}
-			Files.move(tmp.toPath(), file.toPath(), REPLACE_EXISTING);
-			System.out.println("User Added");
-			break;
+	public void register(String userRole) throws IOException, ClassNotFoundException{
+		User user=new User();
+		//Retrieve stored list from file
+		ArrayList<User> retrievedListFromFile = login();
+		//System.out.println(retrievedListFromFile);
+		System.out.println("Enter the username:\n");
+		String name = scan.nextLine();
+		user.setUserName(name);
+		System.out.println("Enter the password:\n");
+		String passcode = scan.nextLine();
+		user.setPassWord(passcode);
+		user.setUserRole(userRole);
+		//creating another user being registered apart from administrator
+		//Adding the new user to an arraylist
+		ArrayList<User> allUsersList = new ArrayList<User>();
+		allUsersList.add(user);
+		//appending arraylist of new users to the arraylist retrieved from the file
+		allUsersList.addAll(retrievedListFromFile);
+		//removing any duplicate in the list
+		allUsersList=removeDuplicates(allUsersList);
+		FileOutputStream fos=new FileOutputStream(filePath);
+		ObjectOutputStream oos=new ObjectOutputStream(fos);
+		oos.writeObject(allUsersList);	
+	}
+
+	public ArrayList<User> login() throws IOException, ClassNotFoundException { 
+		FileInputStream fis=new FileInputStream(filePath);
+		ObjectInputStream ois=new ObjectInputStream(fis);
+		ArrayList<User> userList=new ArrayList<User>();
+		userList=(ArrayList<User>)ois.readObject();
+
+		//for testing purposes
+		for(int i=0;i<userList.size();i++){
+			System.out.println(userList.get(i));
+			System.out.println(userList.size());
 		}
+		return userList;
+	}
+
+	public static ArrayList<User> removeDuplicates(ArrayList<User> userList)
+	{
+		ArrayList<User> noDuplicateUserList = new ArrayList<User>();
+		for (User user : userList) {
+			if (!noDuplicateUserList.contains(user)) {
+				noDuplicateUserList.add(user);
+			}	
+		}
+		return noDuplicateUserList;
 	}
 }
+

@@ -10,13 +10,24 @@ public class User implements Serializable {
 	private String userRole;
 	private enum UserRole{Admin,Customer,Employee};
 	
-	
-	
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public User(String userName, String passWord) {
 		super();
 		this.userName = userName;
 		this.passWord = passWord;
 	}
+	
+	public User(String userName, String passWord,String userRole) {
+		super();
+		this.userName = userName;
+		this.passWord = passWord;
+		this.userRole = userRole;
+
+	}
+	
 	public String getUserName() {
 		return userName;
 	}
