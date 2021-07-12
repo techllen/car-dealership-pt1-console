@@ -33,9 +33,9 @@ public class UserFunctions extends User{
 			System.out.println("2.User(Customer/Employee)");
 			System.out.println("3.Register as Customer");
 
-			
+
 			int typeOfEmployeeChoice = scan.nextInt();
-			
+
 			switch (typeOfEmployeeChoice) {
 			case 1:
 				Scanner in = new Scanner(System.in);
@@ -51,7 +51,7 @@ public class UserFunctions extends User{
 					System.out.println("Please check your username and password");
 				}
 				break;
-				
+
 			case 2:
 				Scanner in1 = new Scanner(System.in);
 				System.out.println("Enter Username:\n");
@@ -60,13 +60,13 @@ public class UserFunctions extends User{
 				String passCode1 = in1.nextLine();
 				//First check the user type customer/employee
 				if ((usrOperation.checkUserType(userName1, passCode1)).equals("Customer")) {
-					
+
 				}else if ((usrOperation.checkUserType(userName1, passCode1)).equals("Employee")) {
-					
+
 				}else {
 					System.out.println("Please check your username and password");
 				}
-				
+
 				break;
 			case 3:				
 				//Register the new user as a customer by passing 
@@ -80,36 +80,36 @@ public class UserFunctions extends User{
 			}
 		}
 
-			
-//			System.out.println("Please tell us what you want to do today select 1 to Signin and 2 to Register and Account\n");
-//			System.out.println("1.Register an account\n");
-//			System.out.println("2.Sign in\n");
-//			try {
-//				int menuSelection = scan.nextInt();
-//
-//				//calling sign in or register function if appropriate selection is selected 
-//				//break the loop right after the condition is fulfilled
-//				if (menuSelection==1) {
-//					usroperation.register();
-//					break;
-//				}else if (menuSelection==2) {
-//					usroperation.login();
-//					break;
-//				}else {
-//					System.out.println("\nplease select 1 or 2");
-//					break;
-//				}
-//			}catch (InputMismatchException i) {
-//				System.out.println("\nplease enter integer 1 or 2");
-//				break;
-//			}
-		}
-		
-		//scan.close();
-	
+
+		//			System.out.println("Please tell us what you want to do today select 1 to Signin and 2 to Register and Account\n");
+		//			System.out.println("1.Register an account\n");
+		//			System.out.println("2.Sign in\n");
+		//			try {
+		//				int menuSelection = scan.nextInt();
+		//
+		//				//calling sign in or register function if appropriate selection is selected 
+		//				//break the loop right after the condition is fulfilled
+		//				if (menuSelection==1) {
+		//					usroperation.register();
+		//					break;
+		//				}else if (menuSelection==2) {
+		//					usroperation.login();
+		//					break;
+		//				}else {
+		//					System.out.println("\nplease select 1 or 2");
+		//					break;
+		//				}
+		//			}catch (InputMismatchException i) {
+		//				System.out.println("\nplease enter integer 1 or 2");
+		//				break;
+		//			}
+	}
+
+	//scan.close();
+
 
 	//default method to create an admin
-	
+
 	public boolean registerAdministrator() throws IOException{
 		ArrayList<User> firstUserList = new ArrayList<User>();
 		//setting administrator as first user
@@ -172,15 +172,20 @@ public class UserFunctions extends User{
 		}
 		return available;
 	}
-	
+
 	public String checkUserType(String userName,String passWord ) throws IOException, ClassNotFoundException { 
 		ArrayList<User> userListToValidate=extractUserList();
 		String userRole = null;
 		for (User user : userListToValidate) {
-			if ((user.getPassWord().equals(passWord)) && (user.getUserName().equals(userName))) {
-				userRole= user.getUserRole();
+			try {
+				if ((user.getPassWord().equals(passWord)) && (user.getUserName().equals(userName))) {
+					userRole= user.getUserRole();
+				}
+			} catch (NullPointerException e) {
+				System.out.println("The system has no users,See the system Admnistrator for further assistance");
 			}
 		}
+
 		return userRole;
 	}
 
@@ -194,8 +199,8 @@ public class UserFunctions extends User{
 		}
 		return noDuplicateUserList;
 	}
-	
-	
+
+
 
 }
 
