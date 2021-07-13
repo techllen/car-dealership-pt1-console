@@ -46,6 +46,8 @@ public class UserFunctions extends User{
 				System.out.println(usrOperation.validateUser(userName, passCode));
 				if (usrOperation.validateUser(userName, passCode)==true){
 					AdminFunctions adm = new AdminFunctions();
+					//log admin
+					applicationLogging.log.info("Administrator Logged In");
 					adm.adminMenu();
 				}else if (usrOperation.validateUser(userName, passCode)==false){
 					System.out.println("Please check your username and password");
