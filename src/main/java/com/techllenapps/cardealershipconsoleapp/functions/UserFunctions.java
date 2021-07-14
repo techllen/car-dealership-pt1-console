@@ -1,7 +1,10 @@
 package com.techllenapps.cardealershipconsoleapp.functions;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,10 +22,8 @@ public class UserFunctions extends User{
 		UserFunctions usrOperation = new UserFunctions();
 		boolean stickMenu = true;
 		Scanner scan = new Scanner(System.in);
-		//default method to register the administrator
-		boolean adminExist = usrOperation.registerAdministrator();
 		//run the program if and only iff we have admini registered 
-		while((stickMenu) && (adminExist)) {
+		while((stickMenu)) {
 			System.out.println("****************************************************************");
 			System.out.println("Wellcome to the Car Dealesrhip Console Application Ver 1.01\n");
 			System.out.println("This is a simple console based Java App for learning purposes\n");
@@ -62,9 +63,11 @@ public class UserFunctions extends User{
 				String passCode1 = in1.nextLine();
 				//First check the user type customer/employee
 				if ((usrOperation.checkUserType(userName1, passCode1)).equals("Customer")) {
-
+					applicationLogging.log.info("Customer "+userName1+" Logged In");
+					CustomerFunctions.customerMenu();
 				}else if ((usrOperation.checkUserType(userName1, passCode1)).equals("Employee")) {
-
+					applicationLogging.log.info("Employee "+userName1+" Logged In");
+					EmployeeFunctions.employeeMenu();
 				}else {
 					System.out.println("Please check your username and password");
 				}
@@ -81,38 +84,10 @@ public class UserFunctions extends User{
 				break;
 			}
 		}
-
-
-		//			System.out.println("Please tell us what you want to do today select 1 to Signin and 2 to Register and Account\n");
-		//			System.out.println("1.Register an account\n");
-		//			System.out.println("2.Sign in\n");
-		//			try {
-		//				int menuSelection = scan.nextInt();
-		//
-		//				//calling sign in or register function if appropriate selection is selected 
-		//				//break the loop right after the condition is fulfilled
-		//				if (menuSelection==1) {
-		//					usroperation.register();
-		//					break;
-		//				}else if (menuSelection==2) {
-		//					usroperation.login();
-		//					break;
-		//				}else {
-		//					System.out.println("\nplease select 1 or 2");
-		//					break;
-		//				}
-		//			}catch (InputMismatchException i) {
-		//				System.out.println("\nplease enter integer 1 or 2");
-		//				break;
-		//			}
 	}
-
-	//scan.close();
-
-
 	//default method to create an admin
 
-	public boolean registerAdministrator() throws IOException{
+	public static void registerAdministrator() throws IOException{
 		ArrayList<User> firstUserList = new ArrayList<User>();
 		//setting administrator as first user
 		User firstUser =new User("Admin","Admin","Administrator");
@@ -120,8 +95,6 @@ public class UserFunctions extends User{
 		FileOutputStream fop=new FileOutputStream(filePath);
 		ObjectOutputStream oos=new ObjectOutputStream(fop);
 		oos.writeObject(firstUserList);
-		boolean administratorAlredySet = true;
-		return administratorAlredySet;
 	}
 
 
@@ -129,7 +102,7 @@ public class UserFunctions extends User{
 		User user=new User();
 		//Retrieve stored list from file
 		ArrayList<User> retrievedListFromFile = extractUserList();
-		System.out.println(retrievedListFromFile);
+		//System.out.println(retrievedListFromFile);
 		System.out.println("Enter the username:\n");
 		String name = scan.nextLine();
 		user.setUserName(name);
@@ -149,18 +122,44 @@ public class UserFunctions extends User{
 		ObjectOutputStream oos=new ObjectOutputStream(fos);
 		oos.writeObject(allUsersList);	
 	}
+	
+	//method that ensures administrator is created
+	public static boolean adminCheck() throws IOException {
+		boolean adminDoNotExist = checkFileSize();
+		//check if file is empty and create admini account
+		//if its not empty means admin was created already
+		if(adminDoNotExist==true) {
+		//default method to register the administrator
+			registerAdministrator();
+			adminDoNotExist=false;
+		}
+		return adminDoNotExist;
+	}
+	
+	//this method is used to avoid creating admin account and ovewrite 
+	//the array list in the file everytime we run the program
+	//returns true when the file is empty
+	public static boolean checkFileSize() throws IOException {
+		boolean fileEmpty = true;
+		BufferedReader br = new BufferedReader(new FileReader(filePath));     
+		if (br.readLine() == null) {
+			fileEmpty=true;
+		}else{
+			fileEmpty=false;
+		}
+		return fileEmpty;
+	}
 
 	public ArrayList<User> extractUserList() throws IOException, ClassNotFoundException { 
 		FileInputStream fis=new FileInputStream(filePath);
 		ObjectInputStream ois=new ObjectInputStream(fis);
 		ArrayList<User> userList=new ArrayList<User>();
 		userList=(ArrayList<User>)ois.readObject();
-
 		//for testing purposes
-		for(int i=0;i<userList.size();i++){
-			System.out.println(userList.get(i));
-			System.out.println(userList.size());
-		}
+//		for(int i=0;i<userList.size();i++){
+//			System.out.println(userList.get(i));
+//			System.out.println(userList.size());
+//		}
 		return userList;
 	}
 
@@ -201,8 +200,5 @@ public class UserFunctions extends User{
 		}
 		return noDuplicateUserList;
 	}
-
-
-
 }
 

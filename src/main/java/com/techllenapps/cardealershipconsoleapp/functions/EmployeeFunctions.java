@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 public class EmployeeFunctions extends UserFunctions{
 	private static final long serialVersionUID = 202107104L;
-	Scanner scan = new Scanner(System.in);
 
-public void customerMenu() throws ClassNotFoundException, IOException{
+public static void employeeMenu() throws ClassNotFoundException, IOException{
 
 	while(true) {
+		Scanner scan = new Scanner(System.in);
 		System.out.println("****************************************************************");
 		System.out.println("Wellcome to the Employee Menu\n");
 		System.out.println("****************************************************************");
@@ -19,7 +19,7 @@ public void customerMenu() throws ClassNotFoundException, IOException{
 		System.out.println("2.Offer Desicion(Accept /reject offer)");
 		System.out.println("3.View the cars that I own");
 		System.out.println("4.Remove a car from the lot");
-		System.out.println("5.View all the paymants\n");
+		System.out.println("5.View all the paymants");
 		System.out.println("6.Exit\n");
 		int choice = scan.nextInt();
 
@@ -39,10 +39,20 @@ public void customerMenu() throws ClassNotFoundException, IOException{
 			UserFunctions.mainMenu();
 			break;
 		default:
-			System.out.println("Invalid Choice,Please select 1 or 2");
+			System.out.println("Invalid Choice,Please select 1 to 6");
 			break;
 		}
 	}
 
 	}
+
+public static void addCarToTheLot() {
+	Scanner scan = new Scanner(System.in);
+	System.out.println("Enter the username:\n");
+	String name = scan.nextLine();
+	user.setUserName(name);
+	System.out.println("Enter the password:\n");
+	String passcode = scan.nextLine();
+	
+}
 }

@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 public class CustomerFunctions extends UserFunctions{
 	private static final long serialVersionUID = 202107103L;
-	Scanner scan = new Scanner(System.in);
 
-public void customerMenu() throws ClassNotFoundException, IOException{
+public static void customerMenu() throws ClassNotFoundException, IOException{
 
 	while(true) {
+		Scanner scan = new Scanner(System.in);
 		System.out.println("****************************************************************");
 		System.out.println("Wellcome to the Customer Menu\n");
 		System.out.println("****************************************************************");
@@ -39,7 +39,7 @@ public void customerMenu() throws ClassNotFoundException, IOException{
 			UserFunctions.mainMenu();
 			break;
 		default:
-			System.out.println("Invalid Choice,Please select 1 or 2");
+			System.out.println("Invalid Choice,Please select 1 to 6");
 			break;
 		}
 	}

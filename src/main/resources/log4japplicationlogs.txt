@@ -1,2 +1,11 @@
 2021-07-12 20:33:07 INFO – Administrator Logged In
 2021-07-12 20:34:25 INFO – Administrator Logged In
+2021-07-13 19:36:40 INFO – Administrator Logged In
+2021-07-13 19:38:10 INFO – Administrator Logged In
+2021-07-13 19:42:40 INFO – Administrator Logged In
+2021-07-13 19:44:26 INFO – Administrator Logged In
+2021-07-13 19:49:42 INFO – Administrator Logged In
+2021-07-13 20:01:33 INFO – Administrator Logged In
+2021-07-13 20:03:52 INFO – Administrator Logged In
+2021-07-13 20:05:01 INFO – Administrator Logged In
+2021-07-13 20:25:37 INFO – Employee allen Logged In

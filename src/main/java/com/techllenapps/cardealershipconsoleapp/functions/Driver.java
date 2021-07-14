@@ -7,6 +7,8 @@ import java.util.Scanner;
 public class Driver{
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		UserFunctions.mainMenu();
-}
+		if(UserFunctions.adminCheck()==false) {
+			UserFunctions.mainMenu();
+		}
+	}
 }
