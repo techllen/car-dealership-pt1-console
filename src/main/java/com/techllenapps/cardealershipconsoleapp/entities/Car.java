@@ -1,19 +1,20 @@
 package com.techllenapps.cardealershipconsoleapp.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Car {
+public class Car implements Serializable{
 	
 	private Double price;
 	private Double milage;
 	private Double noOfOwners;
 	private String color;
-	private String driveTrain;
-	enum DriveTrain{FOURWD,AWD,RWD}
-	private String fuelType;
-	enum FuelType{Electric,Gasoline,Diesel,NaturalGas}
-	private String transmission;
-	enum Transmission{Manual,Automatic}
+	private DriveTrain driveTrain;
+	public enum DriveTrain{FOURWD,AWD,RWD}
+	private FuelType fuelType;
+	public enum FuelType{Electric,Gasoline,Diesel,NaturalGas}
+	private Transmission transmission;
+	public enum Transmission{Manual,Automatic}
 	private String VIN;
 	private String Location;
 	private int year;
@@ -21,8 +22,8 @@ public class Car {
 	private Date datePosted;
 	private String offerMadeBy;
 	private Double amountOffered;
-	private String offerStatus;
-	enum OfferStatus{Accepted,Rejected,Processing}
+	private OfferStatus offerStatus;
+	public enum OfferStatus{Accepted,Rejected,Processing,None}
 	
 	public Double getPrice() {
 		return price;
@@ -48,22 +49,22 @@ public class Car {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	public String getDriveTrain() {
+	public DriveTrain getDriveTrain() {
 		return driveTrain;
 	}
-	public void setDriveTrain(String driveTrain) {
+	public void setDriveTrain(DriveTrain driveTrain) {
 		this.driveTrain = driveTrain;
 	}
-	public String getFuelType() {
+	public FuelType getFuelType() {
 		return fuelType;
 	}
-	public void setFuelType(String fuelType) {
+	public void setFuelType(FuelType fuelType) {
 		this.fuelType = fuelType;
 	}
-	public String getTransmission() {
+	public Transmission getTransmission() {
 		return transmission;
 	}
-	public void setTransmission(String transmission) {
+	public void setTransmission(Transmission transmission) {
 		this.transmission = transmission;
 	}
 	public String getVIN() {
@@ -108,13 +109,12 @@ public class Car {
 	public void setAmountOffered(Double amountOffered) {
 		this.amountOffered = amountOffered;
 	}
-	public String getOfferStatus() {
+	public OfferStatus getOfferStatus() {
 		return offerStatus;
 	}
-	public void setOfferStatus(String offerStatus) {
+	public void setOfferStatus(OfferStatus offerStatus) {
 		this.offerStatus = offerStatus;
 	}
-	
 	@Override
 	public String toString() {
 		return "Car [price=" + price + ", milage=" + milage + ", noOfOwners=" + noOfOwners + ", color=" + color
@@ -123,7 +123,6 @@ public class Car {
 				+ ", offerMadeBy=" + offerMadeBy + ", amountOffered=" + amountOffered + ", offerStatus=" + offerStatus
 				+ "]";
 	}
-	
 	
 	
 }
