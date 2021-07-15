@@ -1,26 +1,23 @@
 package com.techllenapps.cardealershipconsoleapp.functions;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Reader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
 import com.techllenapps.cardealershipconsoleapp.entities.Car;
-import com.techllenapps.cardealershipconsoleapp.entities.User;
 import com.techllenapps.cardealershipconsoleapp.entities.Car.DriveTrain;
 import com.techllenapps.cardealershipconsoleapp.entities.Car.FuelType;
 import com.techllenapps.cardealershipconsoleapp.entities.Car.Transmission;
 
-public class EmployeeFunctions extends UserFunctions{
+public class EmployeeFunctions extends Car implements Serializable{
 	private static final long serialVersionUID = 202107104L;
 	public static String filePath = "//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//cars.txt";
 	static Car car = new Car();
@@ -38,10 +35,9 @@ public class EmployeeFunctions extends UserFunctions{
 			//the administrator will assign employees and their roles as well as view appplication logs
 			System.out.println("1.Add cars to the lot");
 			System.out.println("2.Offer Desicion(Accept /reject offer)");
-			System.out.println("3.View the cars that I own");
-			System.out.println("4.Remove a car from the lot");
-			System.out.println("5.View all the paymants");
-			System.out.println("6.Exit\n");
+			System.out.println("3.Remove a car from the lot");
+			System.out.println("4.View all the paymants");
+			System.out.println("5.Exit\n");
 			int choice = scan.nextInt();
 
 			switch (choice) {
@@ -68,61 +64,61 @@ public class EmployeeFunctions extends UserFunctions{
 
 	}
 
-	public static void addCar() throws ClassNotFoundException, IOException {
+	public static void addCar() throws ClassNotFoundException, IOException{
 		ArrayList<Car> carListToFile = new ArrayList<Car>();
 		carList=extractCarsFromFile();
 		Scanner scan = new Scanner(System.in);
 		Scanner sc = new Scanner(System.in);
 
-		System.out.println("Enter the Car Price in US Dollars:\n");
+		System.out.println("\nEnter the Car Price in US Dollars:");
 		Double price = scan.nextDouble();
 		car.setPrice(price);
 
-		System.out.println("Enter the car milage in miles:\n");
+		System.out.println("\nEnter the car milage in miles:");
 		Double milage = scan.nextDouble();
 		car.setMilage(milage);
 
-		System.out.println("Enter the number of owners previously owned the car:\n");
+		System.out.println("\nEnter the number of owners previously owned the car:");
 		Double noOfOwners = scan.nextDouble();
 		car.setMilage(noOfOwners);
 
-		System.out.println("Enter the color of the car:\n");
-		String color = scan.nextLine();
+		System.out.println("\nEnter the color of the car:");
+		String color = sc.nextLine();
 		car.setColor(color);
 
-		System.out.println("Enter the drivetrain fo the car(fill AWD OR RWD OR FOURWD):\n");
+		System.out.println("\nEnter the drivetrain fo the car(fill AWD OR RWD OR FOURWD):");
 		String driveTrain = sc.nextLine();
-		car.setDriveTrain(DriveTrain.valueOf(driveTrain));
+		car.setDriveTrain(DriveTrain.valueOf(driveTrain.toLowerCase()));
 
-		System.out.println("Enter the type of fuel the car uses(fill Electric OR Gasoline OR Diesel OR NaturalGas):\n");
+		System.out.println("\nEnter the type of fuel the car uses(fill Electric OR Gasoline OR Diesel OR NaturalGas):");
 		String fuelType = sc.nextLine();
-		car.setFuelType(FuelType.valueOf(fuelType)); 
+		car.setFuelType(FuelType.valueOf(fuelType.toLowerCase())); 
 
-		System.out.println("Enter the type of transmission(fill Manual OR Automatic)\n");
+		System.out.println("\nEnter the type of transmission(fill Manual OR Automatic)");
 		String transmission = sc.nextLine();
-		car.setTransmission(Transmission.valueOf(transmission)); 
+		car.setTransmission(Transmission.valueOf(transmission.toLowerCase())); 
 
-		System.out.println("Enter the VIN of the car\n");
-		String VIN = scan.nextLine();
+		System.out.println("\nEnter the VIN of the car");
+		String VIN = sc.nextLine();
 		car.setVIN(VIN); 
 
-		System.out.println("Enter the location\n");
-		String location = scan.nextLine();
+		System.out.println("\nEnter the location");
+		String location = sc.nextLine();
 		car.setLocation(location);
 
-		System.out.println("Enter the year the car was made\n");
-		int year = scan.nextInt();
+		System.out.println("\nEnter the year the car was made");
+		int year = sc.nextInt();
 		car.setYear(year);
 
-		System.out.println("Enter the model of the car\n");
-		String model = scan.nextLine();
+		System.out.println("\nEnter the model of the car\n");
+		String model = sc.nextLine();
 		car.setModel(model);
 
 		Date  date = new Date();
 		car.setDatePosted(date);
 
 		//setting default offer made by as NO Offer
-		car.setOfferMadeBy("None(No Offer)");
+		car.setOfferMadeBy("none(No Offer)");
 
 		//setting default amount offered to 0
 		car.setAmountOffered(0.0);
@@ -136,10 +132,10 @@ public class EmployeeFunctions extends UserFunctions{
 
 		FileOutputStream fis = new FileOutputStream(filePath);
 		ObjectOutputStream oos = new ObjectOutputStream(fis);
-		oos.writeObject(oos);
+		oos.writeObject(carListToFile);
 	}
 
-	public static ArrayList<Car> extractCarsFromFile() throws ClassNotFoundException{
+	public static ArrayList<Car> extractCarsFromFile() throws ClassNotFoundException {
 		//checking of the file is empty 
 		File file = new File(filePath);
 		try {

@@ -10,11 +10,11 @@ public class Car implements Serializable{
 	private Double noOfOwners;
 	private String color;
 	private DriveTrain driveTrain;
-	public enum DriveTrain{FOURWD,AWD,RWD}
+	public enum DriveTrain{fourwd,awd,rwd}
 	private FuelType fuelType;
-	public enum FuelType{Electric,Gasoline,Diesel,NaturalGas}
+	public enum FuelType{electric,gasoline,diesel,naturalGas}
 	private Transmission transmission;
-	public enum Transmission{Manual,Automatic}
+	public enum Transmission{manual,automatic}
 	private String VIN;
 	private String Location;
 	private int year;
@@ -23,7 +23,7 @@ public class Car implements Serializable{
 	private String offerMadeBy;
 	private Double amountOffered;
 	private OfferStatus offerStatus;
-	public enum OfferStatus{Accepted,Rejected,Processing,None}
+	public enum OfferStatus{accepted,rejected,processing,none}
 	
 	public Double getPrice() {
 		return price;
