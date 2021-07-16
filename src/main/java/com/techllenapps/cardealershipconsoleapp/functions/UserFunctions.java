@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.techllenapps.cardealershipconsoleapp.entities.User;
@@ -34,54 +35,57 @@ public class UserFunctions extends User{
 			System.out.println("2.User(Customer/Employee)");
 			System.out.println("3.Register as Customer");
 
+			try {
+				int typeOfEmployeeChoice = scan.nextInt();
 
-			int typeOfEmployeeChoice = scan.nextInt();
+				switch (typeOfEmployeeChoice) {
+				case 1:
+					Scanner in = new Scanner(System.in);
+					System.out.println("Enter Username:\n");
+					String userName = in.nextLine();
+					System.out.println("Enter Password:\n");
+					String passCode = in.nextLine();
+					System.out.println(usrOperation.validateUser(userName, passCode));
+					if (usrOperation.validateUser(userName, passCode)==true){
+						AdminFunctions adm = new AdminFunctions();
+						//log admin
+						applicationLogging.log.info("Administrator Logged In");
+						adm.adminMenu();
+					}else if (usrOperation.validateUser(userName, passCode)==false){
+						System.out.println("Please check your username and password");
+					}
+					break;
 
-			switch (typeOfEmployeeChoice) {
-			case 1:
-				Scanner in = new Scanner(System.in);
-				System.out.println("Enter Username:\n");
-				String userName = in.nextLine();
-				System.out.println("Enter Password:\n");
-				String passCode = in.nextLine();
-				System.out.println(usrOperation.validateUser(userName, passCode));
-				if (usrOperation.validateUser(userName, passCode)==true){
-					AdminFunctions adm = new AdminFunctions();
-					//log admin
-					applicationLogging.log.info("Administrator Logged In");
-					adm.adminMenu();
-				}else if (usrOperation.validateUser(userName, passCode)==false){
-					System.out.println("Please check your username and password");
+				case 2:
+					Scanner in1 = new Scanner(System.in);
+					System.out.println("Enter Username:\n");
+					String userName1 = in1.nextLine();
+					System.out.println("Enter Password:\n");
+					String passCode1 = in1.nextLine();
+					//First check the user type customer/employee
+					if ((usrOperation.checkUserType(userName1, passCode1)).equals("Customer")) {
+						applicationLogging.log.info("Customer "+userName1+" Logged In");
+						CustomerFunctions.customerMenu();
+					}else if ((usrOperation.checkUserType(userName1, passCode1)).equals("Employee")) {
+						applicationLogging.log.info("Employee "+userName1+" Logged In");
+						EmployeeFunctions.employeeMenu();
+					}else {
+						System.out.println("Please check your username and password");
+					}
+
+					break;
+				case 3:				
+					//Register the new user as a customer by passing 
+					//customer as user role in the register method
+					usrOperation.register("Customer");
+					break;
+
+				default:
+					System.out.println("Invalid Choice,Please select 1 ,2 or 3");
+					break;
 				}
-				break;
-
-			case 2:
-				Scanner in1 = new Scanner(System.in);
-				System.out.println("Enter Username:\n");
-				String userName1 = in1.nextLine();
-				System.out.println("Enter Password:\n");
-				String passCode1 = in1.nextLine();
-				//First check the user type customer/employee
-				if ((usrOperation.checkUserType(userName1, passCode1)).equals("Customer")) {
-					applicationLogging.log.info("Customer "+userName1+" Logged In");
-					CustomerFunctions.customerMenu();
-				}else if ((usrOperation.checkUserType(userName1, passCode1)).equals("Employee")) {
-					applicationLogging.log.info("Employee "+userName1+" Logged In");
-					EmployeeFunctions.employeeMenu();
-				}else {
-					System.out.println("Please check your username and password");
-				}
-
-				break;
-			case 3:				
-				//Register the new user as a customer by passing 
-				//customer as user role in the register method
-				usrOperation.register("Customer");
-				break;
-
-			default:
-				System.out.println("Invalid Choice,Please select 1 ,2 or 3");
-				break;
+			} catch (InputMismatchException e) {
+				System.out.println("Invalid Choice,Please select 1 to 6");
 			}
 		}
 	}
@@ -122,20 +126,20 @@ public class UserFunctions extends User{
 		ObjectOutputStream oos=new ObjectOutputStream(fos);
 		oos.writeObject(allUsersList);	
 	}
-	
+
 	//method that ensures administrator is created
 	public static boolean adminCheck() throws IOException {
 		boolean adminDoNotExist = checkFileSize();
 		//check if file is empty and create admini account
 		//if its not empty means admin was created already
 		if(adminDoNotExist==true) {
-		//default method to register the administrator
+			//default method to register the administrator
 			registerAdministrator();
 			adminDoNotExist=false;
 		}
 		return adminDoNotExist;
 	}
-	
+
 	//this method is used to avoid creating admin account and ovewrite 
 	//the array list in the file everytime we run the program
 	//returns true when the file is empty
@@ -156,10 +160,10 @@ public class UserFunctions extends User{
 		ArrayList<User> userList=new ArrayList<User>();
 		userList=(ArrayList<User>)ois.readObject();
 		//for testing purposes
-//		for(int i=0;i<userList.size();i++){
-//			System.out.println(userList.get(i));
-//			System.out.println(userList.size());
-//		}
+		//		for(int i=0;i<userList.size();i++){
+		//			System.out.println(userList.get(i));
+		//			System.out.println(userList.size());
+		//		}
 		return userList;
 	}
 

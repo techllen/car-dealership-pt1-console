@@ -2,7 +2,6 @@ package com.techllenapps.cardealershipconsoleapp.functions;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -10,12 +9,12 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.techllenapps.cardealershipconsoleapp.entities.Car;
-import com.techllenapps.cardealershipconsoleapp.entities.Car.DriveTrain;
-import com.techllenapps.cardealershipconsoleapp.entities.Car.FuelType;
-import com.techllenapps.cardealershipconsoleapp.entities.Car.Transmission;
+import com.techllenapps.cardealershipconsoleapp.entities.User;
+
 
 public class EmployeeFunctions extends Car implements Serializable{
 	private static final long serialVersionUID = 202107104L;
@@ -38,35 +37,47 @@ public class EmployeeFunctions extends Car implements Serializable{
 			System.out.println("3.Remove a car from the lot");
 			System.out.println("4.View all the paymants");
 			System.out.println("5.Exit\n");
-			int choice = scan.nextInt();
+			try {
+				int choice = scan.nextInt();
 
-			switch (choice) {
-			case 1:
-				addCar();
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			case 5:
-				break;
-			case 6:
-				//take the user to the main menu
-				UserFunctions.mainMenu();
-				break;
-			default:
+				switch (choice) {
+				case 1:
+					if (checkCars() == false) {
+						System.out.println("The is no car inventory,please add as prompted below \n");
+						Car car = addCarMenu();
+						addFirstCar(car);
+					}else {
+						Car car = addCarMenu();
+						addOtherCars(car);
+					}
+					break;
+				case 2:
+					viewCars();
+					offerDecision();
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					break;
+				case 6:
+					//take the user to the main menu
+					UserFunctions.mainMenu();
+					break;
+				default:
+					System.out.println("Invalid Choice,Please select 1 to 6");
+					break;
+				}
+			} catch (InputMismatchException e) {
 				System.out.println("Invalid Choice,Please select 1 to 6");
 				break;
 			}
 		}
-
 	}
 
-	public static void addCar() throws ClassNotFoundException, IOException{
+	public static Car addCarMenu() throws ClassNotFoundException, IOException{
 		ArrayList<Car> carListToFile = new ArrayList<Car>();
-		carList=extractCarsFromFile();
 		Scanner scan = new Scanner(System.in);
 		Scanner sc = new Scanner(System.in);
 
@@ -111,7 +122,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 		car.setYear(year);
 
 		System.out.println("\nEnter the model of the car\n");
-		String model = sc.nextLine();
+		String model = scan.nextLine();
 		car.setModel(model);
 
 		Date  date = new Date();
@@ -125,38 +136,46 @@ public class EmployeeFunctions extends Car implements Serializable{
 
 		//setting default offer status to 
 		car.setOfferStatus(null);
+		return car;
+	}
 
-		carListToFile.add(car);
-		carListToFile.addAll(carList);
-		removeDuplicatesCars(carListToFile);
-
+	public static void addFirstCar(Car firstcar) throws ClassNotFoundException, IOException{
+		ArrayList<Car> carListToFile = new ArrayList<Car>();
+		carListToFile.add(firstcar);
 		FileOutputStream fis = new FileOutputStream(filePath);
 		ObjectOutputStream oos = new ObjectOutputStream(fis);
 		oos.writeObject(carListToFile);
 	}
 
-	public static ArrayList<Car> extractCarsFromFile() throws ClassNotFoundException {
-		//checking of the file is empty 
-		File file = new File(filePath);
-		try {
-			if (file.length() == 0) {
-				//System.out.println("There are no cars in the list please add cars as prompted below\n");
-				addCar();
-			}else{
-				FileInputStream fis = new FileInputStream(filePath);
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				carList=(ArrayList<Car>)ois.readObject();
-			}
-		} 
-		catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.out.println("File not found");
-		}	
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("There are no cars in the list please add");
-		}
+	public static void addOtherCars(Car car) throws ClassNotFoundException, IOException{
+		carList=extractCarsFromFile();
+		ArrayList<Car> carListToFile = new ArrayList<Car>();
+		carListToFile.add(car);
+		carListToFile.addAll(carList);
+		removeDuplicatesCars(carListToFile);
+		FileOutputStream fis = new FileOutputStream(filePath);
+		ObjectOutputStream oos = new ObjectOutputStream(fis);
+		oos.writeObject(carListToFile);
+	}
+
+	public static ArrayList<Car> extractCarsFromFile() throws ClassNotFoundException, IOException {
+		FileInputStream fis = new FileInputStream(filePath);
+		ObjectInputStream ois=new ObjectInputStream(fis);
+		carList=(ArrayList<Car>)ois.readObject();
 		return carList;
+	}
+
+	//checking of the file is empty 
+
+	public static boolean checkCars() {
+		boolean carAvailable=false;
+		File file = new File(filePath);
+		if (file.length() == 0) {
+			carAvailable=false;
+		}else{
+			carAvailable=true;
+		}	
+		return carAvailable;
 	}
 
 	public static ArrayList<Car> removeDuplicatesCars(ArrayList<Car> userList)
@@ -168,5 +187,89 @@ public class EmployeeFunctions extends Car implements Serializable{
 			}	
 		}
 		return noDuplicateCarList;
+	}
+
+	public static void offerDecision() throws ClassNotFoundException, IOException {
+		if (checkCars() == false) {
+			System.out.println("The is no car inventory,please add as prompted below \n");
+			Car car = addCarMenu();
+			addFirstCar(car);
+		}else {
+			viewCars();
+			Scanner sc = new Scanner(System.in);
+			System.out.println("\nEnter the ID number of the car that you want to update the offer status");
+			int ID = sc.nextInt();
+			System.out.println("\nEnter the offerstatus fill accepted or rejected or processing or none");
+			String offerStatus = sc.nextLine();
+			setOfferStatusToCar(ID, offerStatus);	
+		}
+	}
+
+	public static void viewCars() throws ClassNotFoundException, IOException {
+		ArrayList<Car> carListToView = extractCarsFromFile();
+		//System.out.println(carListToView);
+		System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  OfferMadeBy"+"  AmountOffered"+"  OfferStatus");
+		for (int c=0;c<carListToView.size();c++) {
+			System.out.println(
+					(c+1)
+					+"  "+ 		
+					carListToView.get(c).getModel()
+					+"  "+
+					carListToView.get(c).getPrice()
+					+"  "+
+					carListToView.get(c).getMilage()
+					+"  "+
+					carListToView.get(c).getNoOfOwners()
+					+
+					carListToView.get(c).getColor()
+					+"  "+
+					carListToView.get(c).getDriveTrain()
+					+"  "+
+					carListToView.get(c).getFuelType()
+					+"  "+
+					carListToView.get(c).getTransmission()
+					+"  "+
+					carListToView.get(c).getVIN()
+					+"  "+
+					carListToView.get(c).getLocation()
+					+"  "+
+					carListToView.get(c).getYear()
+					+"  "+
+					carListToView.get(c).getModel()
+					+"  "+
+					carListToView.get(c).getDatePosted()
+					+"  "+
+					carListToView.get(c).getOfferMadeBy()
+					+"  "+
+					carListToView.get(c).getAmountOffered()
+					+"  "+
+					carListToView.get(c).getOfferStatus()
+
+					);
+		}
+	}
+
+	public static void setOfferStatusToCar(int ID,String offerStatus) throws ClassNotFoundException, IOException {
+		ArrayList<Car> carListToView = extractCarsFromFile();
+		for (int c=0;c<carListToView.size();c++) {
+			if (c==(ID-1)) {
+				carListToView.get(c).setOfferStatus(OfferStatus.valueOf(offerStatus.toLowerCase()));
+			}
+		}
+	}
+	
+	public static void removeCarFromTheLot() throws ClassNotFoundException, IOException {
+		ArrayList<Car> carListToView = extractCarsFromFile();
+		Scanner sc = new Scanner(System.in);
+		System.out.println("\nEnter the ID number of the car that you want to remove from the lot");
+		int ID = sc.nextInt();
+		for (int c=0;c<carListToView.size();c++) {
+			if (c==(ID-1)) {
+				User user = new User();
+				String VIN = carListToView.get(c).getVIN();
+				carListToView.remove(c);
+				applicationLogging.log.info("car with vin number"+ VIN +"has been removed by" + user.getUserName());
+			}
+		}
 	}
 }
