@@ -60,8 +60,6 @@ public class EmployeeFunctions extends Car implements Serializable{
 				case 4:
 					break;
 				case 5:
-					break;
-				case 6:
 					//take the user to the main menu
 					UserFunctions.mainMenu();
 					break;
@@ -79,7 +77,6 @@ public class EmployeeFunctions extends Car implements Serializable{
 	public static Car addCarMenu() throws ClassNotFoundException, IOException{
 		ArrayList<Car> carListToFile = new ArrayList<Car>();
 		Scanner scan = new Scanner(System.in);
-		Scanner sc = new Scanner(System.in);
 
 		System.out.println("\nEnter the Car Price in US Dollars:");
 		Double price = scan.nextDouble();
@@ -91,34 +88,36 @@ public class EmployeeFunctions extends Car implements Serializable{
 
 		System.out.println("\nEnter the number of owners previously owned the car:");
 		Double noOfOwners = scan.nextDouble();
+		scan.nextLine();
 		car.setMilage(noOfOwners);
 
 		System.out.println("\nEnter the color of the car:");
-		String color = sc.nextLine();
+		String color = scan.nextLine();
 		car.setColor(color);
 
 		System.out.println("\nEnter the drivetrain fo the car(fill AWD OR RWD OR FOURWD):");
-		String driveTrain = sc.nextLine();
+		String driveTrain = scan.nextLine();
 		car.setDriveTrain(DriveTrain.valueOf(driveTrain.toLowerCase()));
 
 		System.out.println("\nEnter the type of fuel the car uses(fill Electric OR Gasoline OR Diesel OR NaturalGas):");
-		String fuelType = sc.nextLine();
+		String fuelType = scan.nextLine();
 		car.setFuelType(FuelType.valueOf(fuelType.toLowerCase())); 
 
 		System.out.println("\nEnter the type of transmission(fill Manual OR Automatic)");
-		String transmission = sc.nextLine();
+		String transmission = scan.nextLine();
 		car.setTransmission(Transmission.valueOf(transmission.toLowerCase())); 
 
 		System.out.println("\nEnter the VIN of the car");
-		String VIN = sc.nextLine();
+		String VIN = scan.nextLine();
 		car.setVIN(VIN); 
 
 		System.out.println("\nEnter the location");
-		String location = sc.nextLine();
+		String location = scan.nextLine();
 		car.setLocation(location);
 
 		System.out.println("\nEnter the year the car was made");
-		int year = sc.nextInt();
+		int year = scan.nextInt();
+		scan.nextLine();
 		car.setYear(year);
 
 		System.out.println("\nEnter the model of the car\n");
@@ -135,7 +134,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 		car.setAmountOffered(0.0);
 
 		//setting default offer status to 
-		car.setOfferStatus(null);
+		car.setOfferStatus(OfferStatus.valueOf("none"));
 		return car;
 	}
 
@@ -190,6 +189,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 	}
 
 	public static void offerDecision() throws ClassNotFoundException, IOException {
+		String offerStatus=null;
 		if (checkCars() == false) {
 			System.out.println("The is no car inventory,please add as prompted below \n");
 			Car car = addCarMenu();
@@ -199,9 +199,14 @@ public class EmployeeFunctions extends Car implements Serializable{
 			Scanner sc = new Scanner(System.in);
 			System.out.println("\nEnter the ID number of the car that you want to update the offer status");
 			int ID = sc.nextInt();
+			sc.nextLine();
 			System.out.println("\nEnter the offerstatus fill accepted or rejected or processing or none");
-			String offerStatus = sc.nextLine();
-			setOfferStatusToCar(ID, offerStatus);	
+			try {
+				offerStatus = sc.nextLine();
+				setOfferStatusToCar(ID, offerStatus);
+			} catch (Exception e) {
+				System.out.println("Please enter accepted or rejected or processing");			
+			}	
 		}
 	}
 
@@ -254,6 +259,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 		for (int c=0;c<carListToView.size();c++) {
 			if (c==(ID-1)) {
 				carListToView.get(c).setOfferStatus(OfferStatus.valueOf(offerStatus.toLowerCase()));
+				System.out.println(carListToView.get(c));
 			}
 		}
 	}

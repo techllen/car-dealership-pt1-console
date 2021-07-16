@@ -41,3 +41,12 @@
 2021-07-15 19:57:58 INFO – Employee allen Logged In
 2021-07-15 20:17:06 INFO – Employee allen Logged In
 2021-07-15 20:34:55 INFO – Employee allen Logged In
+2021-07-16 13:59:40 INFO – Employee allen Logged In
+2021-07-16 14:05:12 INFO – Employee allen Logged In
+2021-07-16 14:06:02 INFO – Employee allen Logged In
+2021-07-16 14:11:13 INFO – Employee allen Logged In
+2021-07-16 14:19:37 INFO – Employee allen Logged In
+2021-07-16 14:20:47 INFO – Employee allen Logged In
+2021-07-16 14:22:06 INFO – Employee allen Logged In
+2021-07-16 14:27:56 INFO – Employee allen Logged In
+2021-07-16 14:31:22 INFO – Administrator Logged In
