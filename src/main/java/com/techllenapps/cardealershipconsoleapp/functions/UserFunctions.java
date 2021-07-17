@@ -18,6 +18,8 @@ public class UserFunctions extends User{
 	private static final long serialVersionUID =  202107051958L;
 	public static String filePath = "//media//techllen//01D5CEDF6FF7FE50//Development//5.PROJECTS//car-dealership-pt1-console//src//main//resources//users.txt";
 	Scanner scan = new Scanner(System.in);
+	public static String userInSession = null;
+
 
 	public static void mainMenu() throws IOException, ClassNotFoundException {
 		UserFunctions usrOperation = new UserFunctions();
@@ -63,10 +65,11 @@ public class UserFunctions extends User{
 					System.out.println("Enter Password:\n");
 					String passCode1 = in1.nextLine();
 					//First check the user type customer/employee
-					if ((usrOperation.checkUserType(userName1, passCode1)).equals("Customer")) {
+					if ((usrOperation.validateUserAndcheckUserType(userName1, passCode1)).equals("Customer")) {
+						userInSession = userName1;
 						applicationLogging.log.info("Customer "+userName1+" Logged In");
 						CustomerFunctions.customerMenu();
-					}else if ((usrOperation.checkUserType(userName1, passCode1)).equals("Employee")) {
+					}else if ((usrOperation.validateUserAndcheckUserType(userName1, passCode1)).equals("Employee")) {
 						applicationLogging.log.info("Employee "+userName1+" Logged In");
 						EmployeeFunctions.employeeMenu();
 					}else {
@@ -154,7 +157,7 @@ public class UserFunctions extends User{
 		return fileEmpty;
 	}
 
-	public ArrayList<User> extractUserList() throws IOException, ClassNotFoundException { 
+	public static ArrayList<User> extractUserList() throws IOException, ClassNotFoundException { 
 		FileInputStream fis=new FileInputStream(filePath);
 		ObjectInputStream ois=new ObjectInputStream(fis);
 		ArrayList<User> userList=new ArrayList<User>();
@@ -167,6 +170,7 @@ public class UserFunctions extends User{
 		return userList;
 	}
 
+	//the method below also stores the name of the user in session
 	public boolean validateUser(String userName,String passWord ) throws IOException, ClassNotFoundException { 
 		ArrayList<User> userListToValidate=extractUserList();
 		boolean available=false;
@@ -177,8 +181,9 @@ public class UserFunctions extends User{
 		}
 		return available;
 	}
+	
 
-	public String checkUserType(String userName,String passWord ) throws IOException, ClassNotFoundException { 
+	public String validateUserAndcheckUserType(String userName,String passWord ) throws IOException, ClassNotFoundException { 
 		ArrayList<User> userListToValidate=extractUserList();
 		String userRole = null;
 		for (User user : userListToValidate) {

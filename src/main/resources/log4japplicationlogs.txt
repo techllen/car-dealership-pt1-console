@@ -50,3 +50,18 @@
 2021-07-16 14:22:06 INFO – Employee allen Logged In
 2021-07-16 14:27:56 INFO – Employee allen Logged In
 2021-07-16 14:31:22 INFO – Administrator Logged In
+2021-07-17 08:34:22 INFO – Employee allen Logged In
+2021-07-17 08:47:44 INFO – Employee allen Logged In
+2021-07-17 08:50:02 INFO – Employee allen Logged In
+2021-07-17 08:52:58 INFO – Employee allen Logged In
+2021-07-17 08:54:20 INFO – Employee allen Logged In
+2021-07-17 08:55:14 INFO – car with vin number760696JKJH978Hhas been removed bynull
+2021-07-17 09:33:39 INFO – Administrator Logged In
+2021-07-17 09:48:18 INFO – Administrator Logged In
+2021-07-17 09:51:32 INFO – Administrator Logged In
+2021-07-17 09:53:13 INFO – Customer kilo Logged In
+2021-07-17 09:54:42 INFO – Customer kilo Logged In
+2021-07-17 11:07:29 INFO – Employee allen Logged In
+2021-07-17 11:07:43 INFO – Customer kilo Logged In
+2021-07-17 11:14:43 INFO – Customer kilo Logged In
+2021-07-17 11:16:23 INFO – Customer kilo Logged In

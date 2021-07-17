@@ -46,16 +46,20 @@ public class EmployeeFunctions extends Car implements Serializable{
 						System.out.println("The is no car inventory,please add as prompted below \n");
 						Car car = addCarMenu();
 						addFirstCar(car);
+						System.out.println("\nYou added a car");
 					}else {
 						Car car = addCarMenu();
 						addOtherCars(car);
+						System.out.println("\nYou added a car");
 					}
 					break;
 				case 2:
-					viewCars();
 					offerDecision();
+					System.out.println("Offer Decision Updated");
 					break;
 				case 3:
+					removeCarFromTheLot();
+					System.out.println("\n\none car was deleted from the list");
 					break;
 				case 4:
 					break;
@@ -157,6 +161,16 @@ public class EmployeeFunctions extends Car implements Serializable{
 		oos.writeObject(carListToFile);
 	}
 
+	//the method below will deal with serializing a newly updated arraylist after user/employee does any manipulation on car object
+	public static void updateCar(ArrayList<Car> updatedCarList) throws ClassNotFoundException, IOException{
+		FileOutputStream fis = new FileOutputStream(filePath);
+		ObjectOutputStream oos = new ObjectOutputStream(fis);
+		//overriding the previously stored list of cars with an updated one
+		oos.writeObject(updatedCarList);
+	}
+
+
+
 	public static ArrayList<Car> extractCarsFromFile() throws ClassNotFoundException, IOException {
 		FileInputStream fis = new FileInputStream(filePath);
 		ObjectInputStream ois=new ObjectInputStream(fis);
@@ -210,47 +224,53 @@ public class EmployeeFunctions extends Car implements Serializable{
 		}
 	}
 
-	public static void viewCars() throws ClassNotFoundException, IOException {
-		ArrayList<Car> carListToView = extractCarsFromFile();
-		//System.out.println(carListToView);
-		System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  OfferMadeBy"+"  AmountOffered"+"  OfferStatus");
-		for (int c=0;c<carListToView.size();c++) {
-			System.out.println(
-					(c+1)
-					+"  "+ 		
-					carListToView.get(c).getModel()
-					+"  "+
-					carListToView.get(c).getPrice()
-					+"  "+
-					carListToView.get(c).getMilage()
-					+"  "+
-					carListToView.get(c).getNoOfOwners()
-					+
-					carListToView.get(c).getColor()
-					+"  "+
-					carListToView.get(c).getDriveTrain()
-					+"  "+
-					carListToView.get(c).getFuelType()
-					+"  "+
-					carListToView.get(c).getTransmission()
-					+"  "+
-					carListToView.get(c).getVIN()
-					+"  "+
-					carListToView.get(c).getLocation()
-					+"  "+
-					carListToView.get(c).getYear()
-					+"  "+
-					carListToView.get(c).getModel()
-					+"  "+
-					carListToView.get(c).getDatePosted()
-					+"  "+
-					carListToView.get(c).getOfferMadeBy()
-					+"  "+
-					carListToView.get(c).getAmountOffered()
-					+"  "+
-					carListToView.get(c).getOfferStatus()
 
-					);
+	public static void viewCars() throws ClassNotFoundException, IOException {
+
+		if (checkCars() == false) {
+			System.out.println("The is no car inventory,please contact the dealership \n");
+		}else {
+			ArrayList<Car> carListToView = extractCarsFromFile();
+			//System.out.println(carListToView);
+			System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  OfferMadeBy"+"  AmountOffered"+"  OfferStatus");
+			for (int c=0;c<carListToView.size();c++) {
+				System.out.println(
+						(c+1)
+						+"  "+ 		
+						carListToView.get(c).getModel()
+						+"  "+
+						carListToView.get(c).getPrice()
+						+"  "+
+						carListToView.get(c).getMilage()
+						+"  "+
+						carListToView.get(c).getNoOfOwners()
+						+
+						carListToView.get(c).getColor()
+						+"  "+
+						carListToView.get(c).getDriveTrain()
+						+"  "+
+						carListToView.get(c).getFuelType()
+						+"  "+
+						carListToView.get(c).getTransmission()
+						+"  "+
+						carListToView.get(c).getVIN()
+						+"  "+
+						carListToView.get(c).getLocation()
+						+"  "+
+						carListToView.get(c).getYear()
+						+"  "+
+						carListToView.get(c).getModel()
+						+"  "+
+						carListToView.get(c).getDatePosted()
+						+"  "+
+						carListToView.get(c).getOfferMadeBy()
+						+"  "+
+						carListToView.get(c).getAmountOffered()
+						+"  "+
+						carListToView.get(c).getOfferStatus()
+
+						);
+			}
 		}
 	}
 
@@ -259,15 +279,20 @@ public class EmployeeFunctions extends Car implements Serializable{
 		for (int c=0;c<carListToView.size();c++) {
 			if (c==(ID-1)) {
 				carListToView.get(c).setOfferStatus(OfferStatus.valueOf(offerStatus.toLowerCase()));
-				System.out.println(carListToView.get(c));
+				//testing
+				//System.out.println(carListToView.get(c));
 			}
 		}
+		//testing
+		//System.out.println(carListToView);
+		updateCar(carListToView);
 	}
-	
+
 	public static void removeCarFromTheLot() throws ClassNotFoundException, IOException {
 		ArrayList<Car> carListToView = extractCarsFromFile();
+		viewCars();
 		Scanner sc = new Scanner(System.in);
-		System.out.println("\nEnter the ID number of the car that you want to remove from the lot");
+		System.out.println("\nEnter the ID number of the car that you want to delete from the lot");
 		int ID = sc.nextInt();
 		for (int c=0;c<carListToView.size();c++) {
 			if (c==(ID-1)) {
@@ -277,5 +302,6 @@ public class EmployeeFunctions extends Car implements Serializable{
 				applicationLogging.log.info("car with vin number"+ VIN +"has been removed by" + user.getUserName());
 			}
 		}
+		updateCar(carListToView);
 	}
 }
