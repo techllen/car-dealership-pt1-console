@@ -15,7 +15,6 @@
 4. Log4j is implemented to log events to a file.
 5. 100% test coverage using JUnit Java testing framework (excluding Pojos).
 
-
 ## User Stories
 
 * As a user, I can login.

@@ -277,10 +277,12 @@ public class EmployeeFunctions extends Car implements Serializable{
 	public static void setOfferStatusToCar(int ID,String offerStatus) throws ClassNotFoundException, IOException {
 		ArrayList<Car> carListToView = extractCarsFromFile();
 		for (int c=0;c<carListToView.size();c++) {
-			if (c==(ID-1)) {
+			if (c==(ID-1)&&(carListToView.get(c).getAmountOffered()!=null)) {
 				carListToView.get(c).setOfferStatus(OfferStatus.valueOf(offerStatus.toLowerCase()));
 				//testing
 				//System.out.println(carListToView.get(c));
+			}else if(c==(ID-1)&&(carListToView.get(c).getAmountOffered()==null)){
+				System.out.println("there is no amount offered for this car to be bought");
 			}
 		}
 		//testing
