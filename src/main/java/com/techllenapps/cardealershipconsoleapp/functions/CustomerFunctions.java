@@ -193,6 +193,21 @@ public class CustomerFunctions{
 				carPayment.setLoandata(loandata);
 				monthlyPayment.setMonthlyInstallation(loandata.getMonthlYPaymentAmount());
 				for(int c=0;c<60;c++) {
+					if (c==0) {
+						monthlyPayment.setMonth(c);
+						monthlyPayment.setMonthlyInstallation(0);
+						monthlyPayment.setInterestToBePaid(0);
+						monthlyPayment.setPrincipalToBePaid(0);
+						monthlyPayment.setBalance(car.getPrice());
+					}
+					
+					if (c>0) {
+						monthlyPayment.setMonth(c);
+						monthlyPayment.setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
+						monthlyPayment.setInterestToBePaid((carPayment.getLoandata().getInterestRate())*carPayment.getLoandata().getPrincipal());
+						monthlyPayment.setPrincipalToBePaid(monthlyPayment.getMonthlyInstallation()-monthlyPayment.getInterestToBePaid());
+						monthlyPayment.setBalance(monthlyPayment.getBalance()-monthlyPayment.getMonthlyInstallation());
+					}
 					monthlyPaymentSchedule.add(monthlyPayment);
 				}
 				carPayment.setMontlyPaymentSchedule(monthlyPaymentSchedule);
@@ -282,7 +297,7 @@ public class CustomerFunctions{
 //				System.out.println("\n"+montlyPaymentSchedule.toString());
 				
 			for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
-				System.out.println(monthlyPayment);
+				System.out.println();
 			}
 			}
 		}
