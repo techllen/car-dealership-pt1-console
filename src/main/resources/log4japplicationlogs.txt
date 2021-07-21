@@ -118,3 +118,5 @@
 2021-07-18 15:33:41 INFO – Customer kilo Logged In
 2021-07-18 15:36:15 INFO – Customer kilo Logged In
 2021-07-18 15:41:31 INFO – Customer kilo Logged In
+2021-07-21 12:47:47 INFO – Customer kilo Logged In
+2021-07-21 12:51:06 INFO – Customer kilo Logged In

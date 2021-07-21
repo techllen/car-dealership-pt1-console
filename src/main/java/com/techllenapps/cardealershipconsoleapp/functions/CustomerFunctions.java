@@ -193,7 +193,7 @@ public class CustomerFunctions{
 				carPayment.setLoandata(loandata);
 				monthlyPayment.setMonthlyInstallation(loandata.getMonthlYPaymentAmount());
 				for(int c=0;c<60;c++) {
-				monthlyPaymentSchedule.add(monthlyPayment);
+					monthlyPaymentSchedule.add(monthlyPayment);
 				}
 				carPayment.setMontlyPaymentSchedule(monthlyPaymentSchedule);
 				System.out.println(monthlyPaymentSchedule);
@@ -263,24 +263,27 @@ public class CustomerFunctions{
 			if(carPayment.getLoandata().getVIN().equals(VIN)) {
 				montlyPaymentSchedule=carPayment.getMontlyPaymentSchedule();
 				//payment is done for 60 months for all loans
-				for (int c=0;c<60;c++) {
-					if(c==0) {
-						montlyPaymentSchedule.get(c).setMonth(c);
-						montlyPaymentSchedule.get(c).setMonthlyInstallation(0);
-						montlyPaymentSchedule.get(c).setInterestToBePaid(0);
-						montlyPaymentSchedule.get(c).setPrincipalToBePaid(0);
-						montlyPaymentSchedule.get(c).setBalance(carPayment.getLoandata().getPrincipal());	
-					}
-					else {
-						montlyPaymentSchedule.get(c).setMonth(c);
-						montlyPaymentSchedule.get(c).setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
-						montlyPaymentSchedule.get(c).setInterestToBePaid((carPayment.getLoandata().getInterestRate())*carPayment.getLoandata().getPrincipal());
-						montlyPaymentSchedule.get(c).setPrincipalToBePaid(carPayment.getLoandata().getMonthlYPaymentAmount()-montlyPaymentSchedule.get(c).getInterestToBePaid());
-						montlyPaymentSchedule.get(c).setBalance(montlyPaymentSchedule.get(c-1).getBalance()-montlyPaymentSchedule.get(c).getMonthlyInstallation());	
-					}
-					
-				}
-				System.out.println(montlyPaymentSchedule);
+//				for (int c=0;c<2;c++) {
+//					if(c==0) {
+//						montlyPaymentSchedule.get(c).setMonth(c);
+//						montlyPaymentSchedule.get(c).setMonthlyInstallation(0);
+//						montlyPaymentSchedule.get(c).setInterestToBePaid(0);
+//						montlyPaymentSchedule.get(c).setPrincipalToBePaid(0);
+//						montlyPaymentSchedule.get(c).setBalance(carPayment.getLoandata().getPrincipal());	
+//					}
+//					else if(c>0) {
+//						montlyPaymentSchedule.get(c).setMonth(c);
+//						montlyPaymentSchedule.get(c).setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
+//						montlyPaymentSchedule.get(c).setInterestToBePaid((carPayment.getLoandata().getInterestRate())*carPayment.getLoandata().getPrincipal());
+//						montlyPaymentSchedule.get(c).setPrincipalToBePaid(carPayment.getLoandata().getMonthlYPaymentAmount()-montlyPaymentSchedule.get(c).getInterestToBePaid());
+//						montlyPaymentSchedule.get(c).setBalance(montlyPaymentSchedule.get(c-1).getBalance()-montlyPaymentSchedule.get(c).getMonthlyInstallation());	
+//					}
+//				}
+//				System.out.println("\n"+montlyPaymentSchedule.toString());
+				
+			for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
+				System.out.println(monthlyPayment);
+			}
 			}
 		}
 	}
