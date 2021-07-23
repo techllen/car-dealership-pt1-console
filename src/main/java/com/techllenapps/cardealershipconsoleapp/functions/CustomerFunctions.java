@@ -56,7 +56,7 @@ public class CustomerFunctions{
 					System.out.println("\nThank you for paying for this car");
 				}else {
 					processPayment();
-					addFirstCarPayment(processPayment());
+					addOtherCarPayMents(processPayment());
 					System.out.println("\nThank you for paying for this car");
 				}
 				break;
@@ -172,10 +172,11 @@ public class CustomerFunctions{
 		viewCarsThatIOwn();
 		System.out.println("\nPlease select the VIN of the car that you want to pay for from the list of offers that you made as shown above");
 		String VIN = scan.nextLine();
+		scan.nextLine();
 		CarPayment carPayment = new CarPayment();
 		LoanData loandata = new LoanData();
 		MonthlyPayment monthlyPayment = new MonthlyPayment();
-		ArrayList<MonthlyPayment> monthlyPaymentSchedule = new ArrayList<MonthlyPayment>();
+		ArrayList<MonthlyPayment> monthlyPaymentSchedule = new ArrayList<MonthlyPayment>(60);
 		System.out.println();
 		ArrayList<Car> extractedCars = EmployeeFunctions.extractCarsFromFile();
 		System.out.println(extractedCars);
@@ -192,30 +193,21 @@ public class CustomerFunctions{
 				loandata.setMonthlYPaymentAmount(monthlYPaymentAmount);
 				carPayment.setLoandata(loandata);
 				monthlyPayment.setMonthlyInstallation(loandata.getMonthlYPaymentAmount());
-				for(int c=0;c<60;c++) {
-					if (c==0) {
-						monthlyPayment.setMonth(c);
-						monthlyPayment.setMonthlyInstallation(0);
-						monthlyPayment.setInterestToBePaid(0);
-						monthlyPayment.setPrincipalToBePaid(0);
-						monthlyPayment.setBalance(car.getPrice());
-					}
-					
-					if (c>0) {
-						monthlyPayment.setMonth(c);
-						monthlyPayment.setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
-						monthlyPayment.setInterestToBePaid((carPayment.getLoandata().getInterestRate())*carPayment.getLoandata().getPrincipal());
-						monthlyPayment.setPrincipalToBePaid(monthlyPayment.getMonthlyInstallation()-monthlyPayment.getInterestToBePaid());
-						monthlyPayment.setBalance(monthlyPayment.getBalance()-monthlyPayment.getMonthlyInstallation());
-					}
-					monthlyPaymentSchedule.add(monthlyPayment);
+				for ( MonthlyPayment monthlyPaymentitem : monthlyPaymentSchedule) {
+					monthlyPaymentitem.setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
+					monthlyPaymentitem.setInterestToBePaid((carPayment.getLoandata().getInterestRate())*carPayment.getLoandata().getPrincipal());
+					monthlyPaymentitem.setPrincipalToBePaid(monthlyPayment.getMonthlyInstallation()-monthlyPayment.getInterestToBePaid());
+					monthlyPaymentitem.setBalance(monthlyPayment.getBalance()-monthlyPayment.getMonthlyInstallation());
 				}
-				carPayment.setMontlyPaymentSchedule(monthlyPaymentSchedule);
-				System.out.println(monthlyPaymentSchedule);
+				monthlyPaymentSchedule.add(monthlyPayment);
 			}
+			carPayment.setMontlyPaymentSchedule(monthlyPaymentSchedule);
+			System.out.println(monthlyPaymentSchedule);
+			System.out.println(carPayment);
 		}
 		return carPayment;	
 	}
+
 
 	public static void addFirstCarPayment(CarPayment firstcarpayment) throws ClassNotFoundException, IOException{
 		ArrayList<CarPayment> carPaymentListToFile = new ArrayList<CarPayment>();
@@ -278,27 +270,27 @@ public class CustomerFunctions{
 			if(carPayment.getLoandata().getVIN().equals(VIN)) {
 				montlyPaymentSchedule=carPayment.getMontlyPaymentSchedule();
 				//payment is done for 60 months for all loans
-//				for (int c=0;c<2;c++) {
-//					if(c==0) {
-//						montlyPaymentSchedule.get(c).setMonth(c);
-//						montlyPaymentSchedule.get(c).setMonthlyInstallation(0);
-//						montlyPaymentSchedule.get(c).setInterestToBePaid(0);
-//						montlyPaymentSchedule.get(c).setPrincipalToBePaid(0);
-//						montlyPaymentSchedule.get(c).setBalance(carPayment.getLoandata().getPrincipal());	
-//					}
-//					else if(c>0) {
-//						montlyPaymentSchedule.get(c).setMonth(c);
-//						montlyPaymentSchedule.get(c).setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
-//						montlyPaymentSchedule.get(c).setInterestToBePaid((carPayment.getLoandata().getInterestRate())*carPayment.getLoandata().getPrincipal());
-//						montlyPaymentSchedule.get(c).setPrincipalToBePaid(carPayment.getLoandata().getMonthlYPaymentAmount()-montlyPaymentSchedule.get(c).getInterestToBePaid());
-//						montlyPaymentSchedule.get(c).setBalance(montlyPaymentSchedule.get(c-1).getBalance()-montlyPaymentSchedule.get(c).getMonthlyInstallation());	
-//					}
-//				}
-//				System.out.println("\n"+montlyPaymentSchedule.toString());
-				
-			for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
-				System.out.println();
-			}
+				//				for (int c=0;c<2;c++) {
+				//					if(c==0) {
+				//						montlyPaymentSchedule.get(c).setMonth(c);
+				//						montlyPaymentSchedule.get(c).setMonthlyInstallation(0);
+				//						montlyPaymentSchedule.get(c).setInterestToBePaid(0);
+				//						montlyPaymentSchedule.get(c).setPrincipalToBePaid(0);
+				//						montlyPaymentSchedule.get(c).setBalance(carPayment.getLoandata().getPrincipal());	
+				//					}
+				//					else if(c>0) {
+				//						montlyPaymentSchedule.get(c).setMonth(c);
+				//						montlyPaymentSchedule.get(c).setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
+				//						montlyPaymentSchedule.get(c).setInterestToBePaid((carPayment.getLoandata().getInterestRate())*carPayment.getLoandata().getPrincipal());
+				//						montlyPaymentSchedule.get(c).setPrincipalToBePaid(carPayment.getLoandata().getMonthlYPaymentAmount()-montlyPaymentSchedule.get(c).getInterestToBePaid());
+				//						montlyPaymentSchedule.get(c).setBalance(montlyPaymentSchedule.get(c-1).getBalance()-montlyPaymentSchedule.get(c).getMonthlyInstallation());	
+				//					}
+				//				}
+				//				System.out.println("\n"+montlyPaymentSchedule.toString());
+
+				for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
+					System.out.println();
+				}
 			}
 		}
 	}
