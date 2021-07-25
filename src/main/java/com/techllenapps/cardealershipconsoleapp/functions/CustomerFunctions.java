@@ -1,9 +1,11 @@
 package com.techllenapps.cardealershipconsoleapp.functions;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -51,12 +53,16 @@ public class CustomerFunctions{
 			case 4:
 				if (checkCarPayMent() == false) {
 					System.out.println("\nThe is no any payment plan in our file system \n");
-					processPayment();
-					addFirstCarPayment(processPayment());
+					viewCarsThatIOwn();
+					CarPayment cp = new CarPayment();
+					cp=processPayment();
+					addFirstCarPayment(cp);
 					System.out.println("\nThank you for paying for this car");
 				}else {
-					processPayment();
-					addOtherCarPayMents(processPayment());
+					viewCarsThatIOwn();
+					CarPayment cp = new CarPayment();
+					cp=processPayment();
+					addOtherCarPayMents(cp);
 					System.out.println("\nThank you for paying for this car");
 				}
 				break;
@@ -169,41 +175,45 @@ public class CustomerFunctions{
 	//	}
 
 	public static CarPayment processPayment() throws ClassNotFoundException, IOException {
-		viewCarsThatIOwn();
 		System.out.println("\nPlease select the VIN of the car that you want to pay for from the list of offers that you made as shown above");
-		String VIN = scan.nextLine();
-		scan.nextLine();
+		//Buffered reader was used as alternative to input to the function because scanner couldnt work
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String VIN = reader.readLine();
 		CarPayment carPayment = new CarPayment();
 		LoanData loandata = new LoanData();
 		MonthlyPayment monthlyPayment = new MonthlyPayment();
 		ArrayList<MonthlyPayment> monthlyPaymentSchedule = new ArrayList<MonthlyPayment>(60);
 		System.out.println();
 		ArrayList<Car> extractedCars = EmployeeFunctions.extractCarsFromFile();
-		System.out.println(extractedCars);
 		for (Car car : extractedCars) {
 			if(car.getVIN().equals(VIN)) {
-				System.out.println("*************"+car.getOfferMadeBy());
 				loandata.setOwner(car.getOfferMadeBy());
 				loandata.setVIN(car.getVIN());
 				loandata.setModel(car.getModel());
 				loandata.setPrincipal(car.getPrice());
-				System.out.println("\n********************" + loandata.getPrincipal()+"   "+car.getPrice());
 				double monthlYPaymentAmount;
 				monthlYPaymentAmount=(loandata.getPrincipal())*((loandata.getMonthlyInterestRate()*(Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths())))/((Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths())-1)));
 				loandata.setMonthlYPaymentAmount(monthlYPaymentAmount);
+				System.out.println(loandata);
 				carPayment.setLoandata(loandata);
 				monthlyPayment.setMonthlyInstallation(loandata.getMonthlYPaymentAmount());
-				for ( MonthlyPayment monthlyPaymentitem : monthlyPaymentSchedule) {
-					monthlyPaymentitem.setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
-					monthlyPaymentitem.setInterestToBePaid((carPayment.getLoandata().getInterestRate())*carPayment.getLoandata().getPrincipal());
-					monthlyPaymentitem.setPrincipalToBePaid(monthlyPayment.getMonthlyInstallation()-monthlyPayment.getInterestToBePaid());
-					monthlyPaymentitem.setBalance(monthlyPayment.getBalance()-monthlyPayment.getMonthlyInstallation());
+				//for ( int month=0;month<monthlyPaymentSchedule.size();month++) {
+				for ( int month=0;month<2;month++) {
+					if(month>0) {
+						 
+						monthlyPayment.setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
+						monthlyPayment.setBalance((loandata.getPrincipal()-(month*monthlyPayment.getMonthlyInstallation()))-monthlyPayment.getMonthlyInstallation());
+						monthlyPayment.setInterestToBePaid(loandata.getMonthlyInterestRate()*monthlyPayment.getBalance());
+						monthlyPayment.setPrincipalToBePaid(monthlyPayment.getMonthlyInstallation()-monthlyPayment.getInterestToBePaid());
+						
+					}
+					System.out.println("\n************"+monthlyPayment+"**************\n");
 				}
 				monthlyPaymentSchedule.add(monthlyPayment);
 			}
 			carPayment.setMontlyPaymentSchedule(monthlyPaymentSchedule);
-			System.out.println(monthlyPaymentSchedule);
-			System.out.println(carPayment);
+			//System.out.println(monthlyPaymentSchedule);
+			//System.out.println(carPayment);
 		}
 		return carPayment;	
 	}

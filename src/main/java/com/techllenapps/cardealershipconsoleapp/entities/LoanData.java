@@ -10,8 +10,9 @@ public class LoanData implements Serializable{
 	private Double principal=0.0D;
 	//all our loans are 60 months at 0.99% APR
 	private float termInMonths=60.0F;
+	private float paymentsInAYear=12.0F;
 	private float interestRate = 0.99F;
-	private float monthlyInterestRate = (0.99F)/(100*termInMonths);
+	private float monthlyInterestRate = (0.99F)/(100*paymentsInAYear);
 	private double monthlYPaymentAmount; 
 	//private double monthlYPaymentAmount = (principal)*((monthlyInterestRate*(Math.pow((1+monthlyInterestRate), termInMonths)))/((Math.pow((1+monthlyInterestRate), termInMonths)-1)));
 	public String getOwner() {
