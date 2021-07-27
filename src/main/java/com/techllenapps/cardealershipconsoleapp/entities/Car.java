@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Car implements Serializable{
+	private static final long serialVersionUID =  -116552025298806108L;
 	
 	private Double price;
 	private Double milage;
@@ -24,6 +25,7 @@ public class Car implements Serializable{
 	private Double amountOffered;
 	private OfferStatus offerStatus;
 	public enum OfferStatus{accepted,rejected,processing,none}
+	private CarPayment carPaymet=null;
 	
 	public Double getPrice() {
 		return price;
@@ -114,6 +116,12 @@ public class Car implements Serializable{
 	}
 	public void setOfferStatus(OfferStatus offerStatus) {
 		this.offerStatus = offerStatus;
+	}
+	public CarPayment getCarPaymet() {
+		return carPaymet;
+	}
+	public void setCarPaymet(CarPayment carPaymet) {
+		this.carPaymet = carPaymet;
 	}
 	@Override
 	public String toString() {

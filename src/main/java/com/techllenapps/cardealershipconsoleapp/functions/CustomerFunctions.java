@@ -55,15 +55,27 @@ public class CustomerFunctions{
 					System.out.println("\nThe is no any payment plan in our file system \n");
 					viewCarsThatIOwn();
 					CarPayment cp = new CarPayment();
-					cp=processPayment();
+					System.out.println("\nPlease select the VIN of the car that you want to pay for from the list of offers that you made as shown above");
+					//Buffered reader was used as alternative to input to the function because scanner could not work
+					BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+					String VIN = reader.readLine();
+					cp=processPayment(VIN);
 					addFirstCarPayment(cp);
 					System.out.println("\nThank you for paying for this car");
+					updateCarPayment(cp,VIN);
+					System.out.println("Payments added to the records");
 				}else {
 					viewCarsThatIOwn();
 					CarPayment cp = new CarPayment();
-					cp=processPayment();
+					System.out.println("\nPlease select the VIN of the car that you want to pay for from the list of offers that you made as shown above");
+					//Buffered reader was used as alternative to input to the function because scanner could not work
+					BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+					String VIN = reader.readLine();
+					cp=processPayment(VIN);
 					addOtherCarPayMents(cp);
 					System.out.println("\nThank you for paying for this car");
+					updateCarPayment(cp,VIN);
+					System.out.println("Payments added to the records");
 				}
 				break;
 			case 5:
@@ -165,25 +177,11 @@ public class CustomerFunctions{
 		}
 	}
 
-	//	public static CarPayment makePaymentForTheCar() throws ClassNotFoundException, IOException {
-	//		viewCarsThatIOwn();
-	//		System.out.println("Please select the VIN of the car that you want to pay for from the list of offers that you made as shown above");
-	//		String VIN = scan.nextLine();
-	//		CarPayment carPayment = new CarPayment();
-	//		carPayment = processPayment(VIN);
-	//		return carPayment;
-	//	}
-
-	public static CarPayment processPayment() throws ClassNotFoundException, IOException {
-		System.out.println("\nPlease select the VIN of the car that you want to pay for from the list of offers that you made as shown above");
-		//Buffered reader was used as alternative to input to the function because scanner couldnt work
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		String VIN = reader.readLine();
+	public static CarPayment processPayment(String VIN) throws ClassNotFoundException, IOException {
 		CarPayment carPayment = new CarPayment();
 		LoanData loandata = new LoanData();
 		MonthlyPayment monthlyPayment = new MonthlyPayment();
 		ArrayList<MonthlyPayment> monthlyPaymentSchedule = new ArrayList<MonthlyPayment>(60);
-		System.out.println();
 		ArrayList<Car> extractedCars = EmployeeFunctions.extractCarsFromFile();
 		for (Car car : extractedCars) {
 			if(car.getVIN().equals(VIN)) {
@@ -194,10 +192,8 @@ public class CustomerFunctions{
 				double monthlYPaymentAmount;
 				monthlYPaymentAmount=(loandata.getPrincipal())*((loandata.getMonthlyInterestRate()*(Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths())))/((Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths())-1)));
 				loandata.setMonthlYPaymentAmount(monthlYPaymentAmount);
-				System.out.println(loandata);
 				carPayment.setLoandata(loandata);
 				monthlyPayment.setMonthlyInstallation(loandata.getMonthlYPaymentAmount());
-				//for ( int month=0;month<monthlyPaymentSchedule.size();month++) {
 				for ( int month=0;month<61;month++) {
 					if (month>0) {
 						monthlyPayment.setMonth(month);
@@ -205,19 +201,25 @@ public class CustomerFunctions{
 						monthlyPayment.setBalance((loandata.getPrincipal()-((month-1)*monthlyPayment.getMonthlyInstallation()))-monthlyPayment.getMonthlyInstallation());
 						monthlyPayment.setInterestToBePaid(loandata.getMonthlyInterestRate()*monthlyPayment.getBalance());
 						monthlyPayment.setPrincipalToBePaid(monthlyPayment.getMonthlyInstallation()-monthlyPayment.getInterestToBePaid());
-						System.out.println("\n************"+monthlyPayment+"**************\n");
-
 					}
 				}
 				monthlyPaymentSchedule.add(monthlyPayment);
 			}
 			carPayment.setMontlyPaymentSchedule(monthlyPaymentSchedule);
-			//System.out.println(monthlyPaymentSchedule);
-			//System.out.println(carPayment);
 		}
 		return carPayment;	
 	}
+	
+	public static void updateCarPayment(CarPayment carPayment,String VIN) throws ClassNotFoundException, IOException {
+		ArrayList<Car> updatedCarListWithPayments = EmployeeFunctions.extractCarsFromFile();
 
+		for (Car car : updatedCarListWithPayments) {
+			if(car.getVIN().equals(VIN)) {
+				car.setCarPaymet(carPayment);
+			}
+		}
+		EmployeeFunctions.updateCar(updatedCarListWithPayments);
+	}
 
 	public static void addFirstCarPayment(CarPayment firstcarpayment) throws ClassNotFoundException, IOException{
 		ArrayList<CarPayment> carPaymentListToFile = new ArrayList<CarPayment>();
@@ -271,35 +273,31 @@ public class CustomerFunctions{
 	public static void viewPayMentSchedule() throws ClassNotFoundException, IOException {
 		viewCarsThatIOwn();
 		ArrayList<MonthlyPayment> montlyPaymentSchedule = new ArrayList<MonthlyPayment>();
-		System.out.println("Enter the VIN to view specific repayment schedule");
+		System.out.println("Enter the VIN of the car to view specific repayment schedule");
 		Scanner sc3 = new Scanner(System.in);
 		String VIN = sc3.nextLine();
 		carPayMentList=extractCarPayMentsFromFile();
-		System.out.println("Month   "+"Monthly Installation Amount    "+"Interest      "+"Principal      "+"Balance");
 		for (CarPayment carPayment : carPayMentList) {
 			if(carPayment.getLoandata().getVIN().equals(VIN)) {
+				System.out.println("Below are the details of the loan");
+				System.out.println(
+						"\n"+carPayment.getLoandata().getOwner()+
+						"\n"+carPayment.getLoandata().getVIN()+
+						"\n"+carPayment.getLoandata().getModel()+
+						"\n"+carPayment.getLoandata().getPrincipal()+
+						"\n"+carPayment.getLoandata().getTermInMonths()+
+						"\n"+carPayment.getLoandata().getInterestRate()
+						);
 				montlyPaymentSchedule=carPayment.getMontlyPaymentSchedule();
-				//payment is done for 60 months for all loans
-				//				for (int c=0;c<2;c++) {
-				//					if(c==0) {
-				//						montlyPaymentSchedule.get(c).setMonth(c);
-				//						montlyPaymentSchedule.get(c).setMonthlyInstallation(0);
-				//						montlyPaymentSchedule.get(c).setInterestToBePaid(0);
-				//						montlyPaymentSchedule.get(c).setPrincipalToBePaid(0);
-				//						montlyPaymentSchedule.get(c).setBalance(carPayment.getLoandata().getPrincipal());	
-				//					}
-				//					else if(c>0) {
-				//						montlyPaymentSchedule.get(c).setMonth(c);
-				//						montlyPaymentSchedule.get(c).setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
-				//						montlyPaymentSchedule.get(c).setInterestToBePaid((carPayment.getLoandata().getInterestRate())*carPayment.getLoandata().getPrincipal());
-				//						montlyPaymentSchedule.get(c).setPrincipalToBePaid(carPayment.getLoandata().getMonthlYPaymentAmount()-montlyPaymentSchedule.get(c).getInterestToBePaid());
-				//						montlyPaymentSchedule.get(c).setBalance(montlyPaymentSchedule.get(c-1).getBalance()-montlyPaymentSchedule.get(c).getMonthlyInstallation());	
-				//					}
-				//				}
-				//				System.out.println("\n"+montlyPaymentSchedule.toString());
-
+				System.out.println("Month   "+"Monthly Installation Amount    "+"Interest to be paid     "+"Principal  to be paid    "+"Balance");
 				for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
-					System.out.println();
+					System.out.println(
+							"\n"+monthlyPayment.getMonth()
+							+monthlyPayment.getMonthlyInstallation()
+							+monthlyPayment.getInterestToBePaid()
+							+monthlyPayment.getPrincipalToBePaid()
+							+monthlyPayment.getBalance()
+					);
 				}
 			}
 		}
