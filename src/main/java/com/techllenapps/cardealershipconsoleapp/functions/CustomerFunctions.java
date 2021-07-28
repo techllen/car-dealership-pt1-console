@@ -180,7 +180,7 @@ public class CustomerFunctions{
 	public static CarPayment processPayment(String VIN) throws ClassNotFoundException, IOException {
 		CarPayment carPayment = new CarPayment();
 		LoanData loandata = new LoanData();
-		MonthlyPayment monthlyPayment = new MonthlyPayment();
+		
 		ArrayList<MonthlyPayment> monthlyPaymentSchedule = new ArrayList<MonthlyPayment>(60);
 		ArrayList<Car> extractedCars = EmployeeFunctions.extractCarsFromFile();
 		for (Car car : extractedCars) {
@@ -193,23 +193,23 @@ public class CustomerFunctions{
 				monthlYPaymentAmount=(loandata.getPrincipal())*((loandata.getMonthlyInterestRate()*(Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths())))/((Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths())-1)));
 				loandata.setMonthlYPaymentAmount(monthlYPaymentAmount);
 				carPayment.setLoandata(loandata);
-				monthlyPayment.setMonthlyInstallation(loandata.getMonthlYPaymentAmount());
 				for ( int month=0;month<61;month++) {
 					if (month>0) {
+						MonthlyPayment monthlyPayment = new MonthlyPayment();
 						monthlyPayment.setMonth(month);
 						monthlyPayment.setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
 						monthlyPayment.setBalance((loandata.getPrincipal()-((month-1)*monthlyPayment.getMonthlyInstallation()))-monthlyPayment.getMonthlyInstallation());
 						monthlyPayment.setInterestToBePaid(loandata.getMonthlyInterestRate()*monthlyPayment.getBalance());
 						monthlyPayment.setPrincipalToBePaid(monthlyPayment.getMonthlyInstallation()-monthlyPayment.getInterestToBePaid());
+						monthlyPaymentSchedule.add(monthlyPayment);
 					}
 				}
-				monthlyPaymentSchedule.add(monthlyPayment);
+				carPayment.setMontlyPaymentSchedule(monthlyPaymentSchedule);
 			}
-			carPayment.setMontlyPaymentSchedule(monthlyPaymentSchedule);
 		}
 		return carPayment;	
 	}
-	
+
 	public static void updateCarPayment(CarPayment carPayment,String VIN) throws ClassNotFoundException, IOException {
 		ArrayList<Car> updatedCarListWithPayments = EmployeeFunctions.extractCarsFromFile();
 
@@ -291,13 +291,13 @@ public class CustomerFunctions{
 				montlyPaymentSchedule=carPayment.getMontlyPaymentSchedule();
 				System.out.println("Month   "+"Monthly Installation Amount    "+"Interest to be paid     "+"Principal  to be paid    "+"Balance");
 				for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
-					System.out.println(
-							"\n"+monthlyPayment.getMonth()
-							+monthlyPayment.getMonthlyInstallation()
-							+monthlyPayment.getInterestToBePaid()
-							+monthlyPayment.getPrincipalToBePaid()
-							+monthlyPayment.getBalance()
-					);
+										System.out.println(
+												"\n"+monthlyPayment.getMonth()
+												+monthlyPayment.getMonthlyInstallation()
+												+monthlyPayment.getInterestToBePaid()
+												+monthlyPayment.getPrincipalToBePaid()
+												+monthlyPayment.getBalance()
+										);
 				}
 			}
 		}

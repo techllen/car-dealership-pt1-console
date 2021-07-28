@@ -232,7 +232,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 		}else {
 			ArrayList<Car> carListToView = extractCarsFromFile();
 			//System.out.println(carListToView);
-			System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  OfferMadeBy"+"  AmountOffered"+"  OfferStatus");
+			System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  AmountOffered"+"  OfferStatus");
 			for (int c=0;c<carListToView.size();c++) {
 				System.out.println(
 						(c+1)
@@ -263,8 +263,8 @@ public class EmployeeFunctions extends Car implements Serializable{
 						+"  "+
 						carListToView.get(c).getDatePosted()
 						+"  "+
-						carListToView.get(c).getOfferMadeBy()
-						+"  "+
+						//carListToView.get(c).getOfferMadeBy()
+						//+"  "+
 						carListToView.get(c).getAmountOffered()
 						+"  "+
 						carListToView.get(c).getOfferStatus()
