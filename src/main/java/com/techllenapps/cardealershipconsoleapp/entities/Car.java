@@ -27,6 +27,15 @@ public class Car implements Serializable{
 	public enum OfferStatus{accepted,rejected,processing,none}
 	private CarPayment carPaymet=null;
 	
+	public Car(Car car) {
+		// TODO Auto-generated constructor stub
+	}
+	public Car() {
+		// TODO Auto-generated constructor stub
+	}
+	public Car(Car car) {
+		// TODO Auto-generated constructor stub
+	}
 	public Double getPrice() {
 		return price;
 	}

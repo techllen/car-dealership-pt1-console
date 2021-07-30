@@ -62,8 +62,9 @@ public class EmployeeFunctions extends Car implements Serializable{
 					System.out.println("\n\none car was deleted from the list");
 					break;
 				case 4:
-					viewCars();
-					CustomerFunctions.viewPayMentSchedule();
+					//viewCars();
+					CustomerFunctions.viewCarsOffers();
+					//CustomerFunctions.viewPayMentSchedule();
 					break;
 				case 5:
 					//take the user to the main menu
@@ -233,8 +234,9 @@ public class EmployeeFunctions extends Car implements Serializable{
 			System.out.println("The is no car inventory,please contact the dealership \n");
 		}else {
 			ArrayList<Car> carListToView = extractCarsFromFile();
-			System.out.println("\n"+ carListToView);
-			System.out.println("\n"+ carListToView.size());
+// 			testing
+//			System.out.println("\n"+ carListToView);
+//			System.out.println("\n"+ carListToView.size());
 			System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  AmountOffered"+"  OfferStatus");
 			for (int c=0;c<carListToView.size();c++) {
 				System.out.println(

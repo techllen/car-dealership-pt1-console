@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.techllenapps.cardealershipconsoleapp.entities.Car;
@@ -95,7 +96,7 @@ public class CustomerFunctions{
 
 	}
 
-	public static Car makeAnOffer() throws ClassNotFoundException, IOException {
+	public static void makeAnOffer() throws ClassNotFoundException, IOException {
 		EmployeeFunctions.viewCars();
 		Scanner sc = new Scanner(System.in);
 		Car carOffer = new Car();
@@ -105,50 +106,49 @@ public class CustomerFunctions{
 		System.out.println("\nEnter the amount that you want to offer for the car");
 		try {
 			Double amountOffered = sc.nextDouble();
-			carOffer = setAmountOfferedToACar(ID, amountOffered,UserFunctions.userInSession);
+			setAmountOfferedToACar(ID, amountOffered,UserFunctions.userInSession);
 		} catch (Exception e) {
 			System.out.println("Please amount in numbers eg. 345679.90");			
 		}
-		return carOffer;	
 	}
 
-	public static Car  setAmountOfferedToACar(int ID,Double amountOffered,String userInSession) throws ClassNotFoundException, IOException {
+	public static void  setAmountOfferedToACar(int ID,Double amountOffered,String userInSession) throws ClassNotFoundException, IOException {
 		ArrayList<Car> carListToView = EmployeeFunctions.extractCarsFromFile();
-		Car carOffer = new Car();
-		OfferStatus offerstatus =null;
+		List<Car> newCarListOffer = new ArrayList<Car>();
+		Car newCarOffer = new Car();
 		for (int c=0;c<carListToView.size();c++) {
 			//making the system reject for a new offer if the offer has been placed already
 			//accept offer if and only iff its not accepted
-			if (c==(ID-1)&&((carListToView.get(c).getOfferStatus().compareTo(offerstatus.accepted)))==0) {
-				System.out.println(((carListToView.get(c).getOfferStatus()).compareTo(offerstatus.accepted))!=0);
-				System.out.println((carListToView.get(c).getOfferStatus()));
-				carListToView.get(c).setAmountOffered(amountOffered);
-				carListToView.get(c).setOfferMadeBy(userInSession);
-				carOffer=carListToView.get(c);
-				carListToView.add(carOffer);
+			if (c==ID-1) {
+				newCarOffer=carListToView.get(c);
+				newCarOffer.setAmountOffered(amountOffered);
+				newCarOffer.setOfferMadeBy(userInSession);
 				//testing
-				//System.out.println(carListToView.get(c));
-			}else if (c==(ID-1)&&((carListToView.get(c).getOfferStatus().compareTo(offerstatus.accepted)))==0) {
+				System.out.println("\n******"+newCarOffer);
+				System.out.println("\n******"+carListToView + "\n******"+carListToView.size() );
+			}else if (c==ID-1) {
 				System.out.println("This item is no longer available for making offers");
 			}
-			carListToView.add(carOffer);
 		}
+		newCarListOffer.add(newCarOffer);
+		carListToView.addAll(newCarListOffer);
 		//testing
 		//System.out.println(carListToView);
+		//remove duplicates before adding to the list
+		//carListToView=removeDuplicatesCarsOffers(carListToView);
 		EmployeeFunctions.updateCar(carListToView);
-		return carOffer;
-
 	}
 
-	public static void addOffers() throws ClassNotFoundException, IOException { 
-		if (checkCarsOffers()==false) {
-			Car carOffer = makeAnOffer();
-			addFirstOffer(carOffer);
-			
-		}else if (checkCarsOffers()==true) {
-			Car carOffer = makeAnOffer();
-			addOtherCarsOffer(carOffer);
+	public static ArrayList<Car> removeDuplicatesCarsOffers(ArrayList<Car> cars) throws ClassNotFoundException, IOException
+	{
+		ArrayList<Car> carList=	EmployeeFunctions.extractCarsFromFile();;
+		ArrayList<Car> noDuplicateCarList = new ArrayList<Car>();
+		for (Car Car : carList) {
+			if (!noDuplicateCarList.contains(Car)) {
+				noDuplicateCarList.add(Car);
+			}	
 		}
+		return noDuplicateCarList;
 	}
 
 	public static void viewCarsThatIOwn() throws ClassNotFoundException, IOException {
@@ -326,116 +326,6 @@ public class CustomerFunctions{
 							+monthlyPayment.getBalance()
 							);
 				}
-			}
-		}
-	}
-
-	public static void addFirstOffer(Car firstcar) throws ClassNotFoundException, IOException{
-		ArrayList<Car> carListToFile = new ArrayList<Car>();
-		carListToFile.add(firstcar);
-		FileOutputStream fis = new FileOutputStream(offersFilePath);
-		ObjectOutputStream oos = new ObjectOutputStream(fis);
-		oos.writeObject(carListToFile);
-	}
-
-	public static void addOtherCarsOffer(Car car) throws ClassNotFoundException, IOException{
-		ArrayList<Car> carList=extractCarsOffersFromFile();
-		ArrayList<Car> carListToFile = new ArrayList<Car>();
-		carListToFile.add(car);
-		carListToFile.addAll(carList);
-		removeDuplicatesCarsOffers(carListToFile);
-		FileOutputStream fis = new FileOutputStream(offersFilePath);
-		ObjectOutputStream oos = new ObjectOutputStream(fis);
-		oos.writeObject(carListToFile);
-	}
-
-	//the method below will deal with serializing a newly updated arraylist after user/employee does any manipulation on car object
-	public static void updateCarOffers(ArrayList<Car> updatedCarList) throws ClassNotFoundException, IOException{
-		FileOutputStream fis = new FileOutputStream(offersFilePath);
-		ObjectOutputStream oos = new ObjectOutputStream(fis);
-		//overriding the previously stored list of cars with an updated one
-		oos.writeObject(updatedCarList);
-	}
-
-
-
-	public static ArrayList<Car> extractCarsOffersFromFile() throws ClassNotFoundException, IOException {
-		FileInputStream fis = new FileInputStream(offersFilePath);
-		ObjectInputStream ois=new ObjectInputStream(fis);
-		ArrayList<Car> carList=(ArrayList<Car>)ois.readObject();
-		return carList;
-	}
-
-	//checking of the file is empty 
-
-	public static boolean checkCarsOffers() {
-		boolean carAvailable=false;
-		File file = new File(offersFilePath);
-		if (file.length() == 0) {
-			carAvailable=false;
-		}else{
-			carAvailable=true;
-		}	
-		return carAvailable;
-	}
-
-	public static ArrayList<Car> removeDuplicatesCarsOffers(ArrayList<Car> userList)
-	{
-		ArrayList<Car> carList=null;
-		ArrayList<Car> noDuplicateCarList = new ArrayList<Car>();
-		for (Car Car : carList) {
-			if (!noDuplicateCarList.contains(Car)) {
-				noDuplicateCarList.add(Car);
-			}	
-		}
-		return noDuplicateCarList;
-	}
-	
-	public static void viewCarsOffers() throws ClassNotFoundException, IOException {
-
-		if (checkCarsOffers() == false) {
-			System.out.println("The is no car inventory,please contact the dealership \n");
-		}else {
-			ArrayList<Car> carListToView = extractCarsOffersFromFile();
-			//System.out.println(carListToView);
-			System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  Offer made by"+"  AmountOffered"+"  OfferStatus");
-			for (int c=0;c<carListToView.size();c++) {
-				System.out.println(
-						(c+1)
-						+"  "+ 		
-						carListToView.get(c).getModel()
-						+"  "+
-						carListToView.get(c).getPrice()
-						+"  "+
-						carListToView.get(c).getMilage()
-						+"  "+
-						carListToView.get(c).getNoOfOwners()
-						+
-						carListToView.get(c).getColor()
-						+"  "+
-						carListToView.get(c).getDriveTrain()
-						+"  "+
-						carListToView.get(c).getFuelType()
-						+"  "+
-						carListToView.get(c).getTransmission()
-						+"  "+
-						carListToView.get(c).getVIN()
-						+"  "+
-						carListToView.get(c).getLocation()
-						+"  "+
-						carListToView.get(c).getYear()
-						+"  "+
-						carListToView.get(c).getModel()
-						+"  "+
-						carListToView.get(c).getDatePosted()
-						+"  "+
-						carListToView.get(c).getOfferMadeBy()
-						+"  "+
-						carListToView.get(c).getAmountOffered()
-						+"  "+
-						carListToView.get(c).getOfferStatus()
-
-						);
 			}
 		}
 	}
