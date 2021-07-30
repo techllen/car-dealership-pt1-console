@@ -192,3 +192,7 @@
 2021-07-27 19:35:18 INFO – Administrator Logged In
 2021-07-27 19:35:59 INFO – Customer win Logged In
 2021-07-27 19:39:37 INFO – Customer win Logged In
+2021-07-29 17:08:01 INFO – Administrator Logged In
+2021-07-29 17:09:57 INFO – Employee allen Logged In
+2021-07-29 17:11:51 INFO – Employee allen Logged In
+2021-07-29 17:13:49 INFO – Employee allen Logged In

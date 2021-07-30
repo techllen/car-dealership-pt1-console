@@ -62,6 +62,8 @@ public class EmployeeFunctions extends Car implements Serializable{
 					System.out.println("\n\none car was deleted from the list");
 					break;
 				case 4:
+					viewCars();
+					CustomerFunctions.viewPayMentSchedule();
 					break;
 				case 5:
 					//take the user to the main menu
