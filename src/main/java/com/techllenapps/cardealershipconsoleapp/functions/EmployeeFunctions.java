@@ -35,7 +35,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 			System.out.println("1.Add cars to the lot");
 			System.out.println("2.Offer Desicion(Accept /reject offer)");
 			System.out.println("3.Remove a car from the lot");
-			System.out.println("4.View all the paymants");
+			System.out.println("4.View all the payments");
 			System.out.println("5.Exit\n");
 			try {
 				int choice = scan.nextInt();
@@ -140,7 +140,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 		car.setAmountOffered(0.0);
 
 		//setting default offer status to 
-		car.setOfferStatus(OfferStatus.valueOf("none"));
+		car.setOfferStatus(OfferStatus.valueOf(null));
 		return car;
 	}
 
@@ -216,7 +216,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 			System.out.println("\nEnter the ID number of the car that you want to update the offer status");
 			int ID = sc.nextInt();
 			sc.nextLine();
-			System.out.println("\nEnter the offerstatus fill accepted or rejected or processing or none");
+			System.out.println("\nEnter the offerstatus fill accepted or rejected");
 			try {
 				offerStatus = sc.nextLine();
 				setOfferStatusToCar(ID, offerStatus);
@@ -233,7 +233,8 @@ public class EmployeeFunctions extends Car implements Serializable{
 			System.out.println("The is no car inventory,please contact the dealership \n");
 		}else {
 			ArrayList<Car> carListToView = extractCarsFromFile();
-			//System.out.println(carListToView);
+			System.out.println("\n"+ carListToView);
+			System.out.println("\n"+ carListToView.size());
 			System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  AmountOffered"+"  OfferStatus");
 			for (int c=0;c<carListToView.size();c++) {
 				System.out.println(
