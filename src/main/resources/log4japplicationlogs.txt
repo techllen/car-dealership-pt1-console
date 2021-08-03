@@ -249,3 +249,16 @@
 2021-08-02 22:15:50 INFO – Customer kilo Logged In
 2021-08-02 22:19:10 INFO – Customer win Logged In
 2021-08-02 22:22:22 INFO – Customer kilo Logged In
+2021-08-02 22:35:37 INFO – Customer kilo Logged In
+2021-08-02 22:37:44 INFO – Customer kilo Logged In
+2021-08-02 22:41:30 INFO – Customer kilo Logged In
+2021-08-02 22:42:45 INFO – Customer kilo Logged In
+2021-08-02 22:46:59 INFO – Customer kilo Logged In
+2021-08-02 22:49:25 INFO – Customer kilo Logged In
+2021-08-02 22:54:43 INFO – Customer kilo Logged In
+2021-08-02 23:00:30 INFO – Customer kilo Logged In
+2021-08-02 23:13:47 INFO – Customer kilo Logged In
+2021-08-02 23:16:44 INFO – Employee allen Logged In
+2021-08-02 23:19:38 INFO – Employee allen Logged In
+2021-08-02 23:26:13 INFO – Employee allen Logged In
+2021-08-02 23:30:31 INFO – Employee allen Logged In

@@ -74,6 +74,7 @@ public class UserFunctions extends User{
 						EmployeeFunctions.employeeMenu();
 					}else {
 						System.out.println("Please check your username and password");
+						mainMenu();
 					}
 
 					break;
@@ -88,7 +89,7 @@ public class UserFunctions extends User{
 					break;
 				}
 			} catch (InputMismatchException e) {
-				System.out.println("Invalid Choice,Please select 1 to 6");
+				System.out.println("Invalid Choice,Please select given options");
 			}
 		}
 	}

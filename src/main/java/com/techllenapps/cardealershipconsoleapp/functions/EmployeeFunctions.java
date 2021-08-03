@@ -62,8 +62,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 					System.out.println("\n\none car was deleted from the list");
 					break;
 				case 4:
-					//viewCars();
-					CustomerFunctions.viewCarsOffers();
+					viewCars();
 					//CustomerFunctions.viewPayMentSchedule();
 					break;
 				case 5:
@@ -84,64 +83,69 @@ public class EmployeeFunctions extends Car implements Serializable{
 	public static Car addCarMenu() throws ClassNotFoundException, IOException{
 		ArrayList<Car> carListToFile = new ArrayList<Car>();
 		Scanner scan = new Scanner(System.in);
+		try {
+			System.out.println("\nEnter the Car Price in US Dollars:");
+			Double price = scan.nextDouble();
+			car.setPrice(price);
 
-		System.out.println("\nEnter the Car Price in US Dollars:");
-		Double price = scan.nextDouble();
-		car.setPrice(price);
+			System.out.println("\nEnter the car milage in miles:");
+			Double milage = scan.nextDouble();
+			car.setMilage(milage);
 
-		System.out.println("\nEnter the car milage in miles:");
-		Double milage = scan.nextDouble();
-		car.setMilage(milage);
+			System.out.println("\nEnter the number of owners previously owned the car:");
+			Double noOfOwners = scan.nextDouble();
+			scan.nextLine();
+			car.setMilage(noOfOwners);
 
-		System.out.println("\nEnter the number of owners previously owned the car:");
-		Double noOfOwners = scan.nextDouble();
-		scan.nextLine();
-		car.setMilage(noOfOwners);
+			System.out.println("\nEnter the color of the car:");
+			String color = scan.nextLine();
+			car.setColor(color);
 
-		System.out.println("\nEnter the color of the car:");
-		String color = scan.nextLine();
-		car.setColor(color);
+			System.out.println("\nEnter the drivetrain fo the car(fill AWD OR RWD OR FOURWD):");
+			String driveTrain = scan.nextLine();
+			car.setDriveTrain(DriveTrain.valueOf(driveTrain.toLowerCase()));
 
-		System.out.println("\nEnter the drivetrain fo the car(fill AWD OR RWD OR FOURWD):");
-		String driveTrain = scan.nextLine();
-		car.setDriveTrain(DriveTrain.valueOf(driveTrain.toLowerCase()));
+			System.out.println("\nEnter the type of fuel the car uses(fill Electric OR Gasoline OR Diesel OR NaturalGas):");
+			String fuelType = scan.nextLine();
+			car.setFuelType(FuelType.valueOf(fuelType.toLowerCase())); 
 
-		System.out.println("\nEnter the type of fuel the car uses(fill Electric OR Gasoline OR Diesel OR NaturalGas):");
-		String fuelType = scan.nextLine();
-		car.setFuelType(FuelType.valueOf(fuelType.toLowerCase())); 
+			System.out.println("\nEnter the type of transmission(fill Manual OR Automatic)");
+			String transmission = scan.nextLine();
+			car.setTransmission(Transmission.valueOf(transmission.toLowerCase())); 
 
-		System.out.println("\nEnter the type of transmission(fill Manual OR Automatic)");
-		String transmission = scan.nextLine();
-		car.setTransmission(Transmission.valueOf(transmission.toLowerCase())); 
+			System.out.println("\nEnter the VIN of the car");
+			String VIN = scan.nextLine();
+			car.setVIN(VIN); 
 
-		System.out.println("\nEnter the VIN of the car");
-		String VIN = scan.nextLine();
-		car.setVIN(VIN); 
+			System.out.println("\nEnter the location");
+			String location = scan.nextLine();
+			car.setLocation(location);
 
-		System.out.println("\nEnter the location");
-		String location = scan.nextLine();
-		car.setLocation(location);
+			System.out.println("\nEnter the year the car was made");
+			int year = scan.nextInt();
+			scan.nextLine();
+			car.setYear(year);
 
-		System.out.println("\nEnter the year the car was made");
-		int year = scan.nextInt();
-		scan.nextLine();
-		car.setYear(year);
+			System.out.println("\nEnter the model of the car\n");
+			String model = scan.nextLine();
+			car.setModel(model);
 
-		System.out.println("\nEnter the model of the car\n");
-		String model = scan.nextLine();
-		car.setModel(model);
+			Date  date = new Date();
+			car.setDatePosted(date);
 
-		Date  date = new Date();
-		car.setDatePosted(date);
+			//setting default offer made by as NO Offer
+			car.setOfferMadeBy("none(No Offer)");
 
-		//setting default offer made by as NO Offer
-		car.setOfferMadeBy("none(No Offer)");
+			//setting default amount offered to 0
+			car.setAmountOffered(0.0);
 
-		//setting default amount offered to 0
-		car.setAmountOffered(0.0);
+			//setting default offer status to 
+			car.setOfferStatus(null);
+		} catch (java.lang.IllegalArgumentException e) {
+			System.out.println("Enter the required Input");
+			UserFunctions.mainMenu();
+		}
 
-		//setting default offer status to 
-		car.setOfferStatus(OfferStatus.valueOf(null));
 		return car;
 	}
 
@@ -234,9 +238,9 @@ public class EmployeeFunctions extends Car implements Serializable{
 			System.out.println("The is no car inventory,please contact the dealership \n");
 		}else {
 			ArrayList<Car> carListToView = extractCarsFromFile();
-// 			testing
-//			System.out.println("\n"+ carListToView);
-//			System.out.println("\n"+ carListToView.size());
+			// 			testing
+			//			System.out.println("\n"+ carListToView);
+			//			System.out.println("\n"+ carListToView.size());
 			System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  AmountOffered"+"  OfferStatus");
 			for (int c=0;c<carListToView.size();c++) {
 				System.out.println(
@@ -296,19 +300,24 @@ public class EmployeeFunctions extends Car implements Serializable{
 	}
 
 	public static void removeCarFromTheLot() throws ClassNotFoundException, IOException {
-		ArrayList<Car> carListToView = extractCarsFromFile();
-		viewCars();
-		Scanner sc = new Scanner(System.in);
-		System.out.println("\nEnter the ID number of the car that you want to delete from the lot");
-		int ID = sc.nextInt();
-		for (int c=0;c<carListToView.size();c++) {
-			if (c==(ID-1)) {
-				User user = new User();
-				String VIN = carListToView.get(c).getVIN();
-				carListToView.remove(c);
-				applicationLogging.log.info("car with vin number"+ VIN +"has been removed by" + user.getUserName());
+		try {
+			ArrayList<Car> carListToView = extractCarsFromFile();
+
+			viewCars();
+			Scanner sc = new Scanner(System.in);
+			System.out.println("\nEnter the ID number of the car that you want to delete from the lot");
+			int ID = sc.nextInt();
+			for (int c=0;c<carListToView.size();c++) {
+				if (c==(ID-1)&&(checkCars() == true)) {
+					User user = new User();
+					String VIN = carListToView.get(c).getVIN();
+					carListToView.remove(c);
+					applicationLogging.log.info("car with vin number"+ VIN +"has been removed by" + user.getUserName());
+				}
+				updateCar(carListToView);
 			}
-		}
-		updateCar(carListToView);
+		} catch (Exception e) {
+			System.out.println("There are no cars in the inventory");
+		}	
 	}
 }

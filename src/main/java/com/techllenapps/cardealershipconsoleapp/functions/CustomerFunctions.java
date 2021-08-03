@@ -108,7 +108,8 @@ public class CustomerFunctions{
 			Double amountOffered = sc.nextDouble();
 			setAmountOfferedToACar(ID, amountOffered,UserFunctions.userInSession);
 		} catch (Exception e) {
-			System.out.println("Please amount in numbers eg. 345679.90");			
+			System.out.println("Please enter the amount in numbers eg. 345679.90");	
+			e.printStackTrace();
 		}
 	}
 
@@ -119,7 +120,8 @@ public class CustomerFunctions{
 		for (int c=0;c<carListToView.size();c++) {
 			//making the system reject for a new offer if the offer has been placed already
 			//accept offer if and only iff its not accepted
-			if (c==ID-1) {
+			if ((c==ID-1)&&(carListToView.get(c).getOfferStatus().compareTo(null)==0)){
+				//System.out.println(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0);
 				newCarOffer.setPrice(carListToView.get(c).getPrice());
 				newCarOffer.setMilage(carListToView.get(c).getMilage());
 				newCarOffer.setNoOfOwners(carListToView.get(c).getNoOfOwners());
@@ -139,11 +141,12 @@ public class CustomerFunctions{
 				//testing
 				System.out.println("\n******"+newCarOffer);
 				System.out.println("\n******"+carListToView + "\n******"+carListToView.size() );
-			}else if (c==ID-1) {
-				System.out.println("This item is no longer available for making offers");
+				newCarListOffer.add(newCarOffer);
+			}else if ((c==ID-1)&&(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0)) {
+				System.out.println("\nThis car is no longer available for making offers");
 			}
 		}
-		newCarListOffer.add(newCarOffer);
+
 		carListToView.addAll(newCarListOffer);
 		//testing
 		//System.out.println(carListToView);
