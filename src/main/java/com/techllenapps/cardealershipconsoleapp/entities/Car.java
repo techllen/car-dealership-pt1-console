@@ -23,9 +23,9 @@ public class Car implements Serializable{
 	private Date datePosted;
 	private String offerMadeBy;
 	private Double amountOffered;
-	private OfferStatus offerStatus=null;
+	private OfferStatus offerStatus;
 	//public enum OfferStatus{accepted,rejected,processing,none}
-	public enum OfferStatus{accepted,rejected}
+	public enum OfferStatus{accepted,pending}
 	private CarPayment carPaymet=null;
 	
 	public Double getPrice() {

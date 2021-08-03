@@ -34,7 +34,7 @@ public class CustomerFunctions{
 			System.out.println("****************************************************************");
 			System.out.println("Please select the number to reflect the choices below");
 			//the administrator will assign employees and their roles as well as view appplication logs
-			System.out.println("1.View all available cars");
+			System.out.println("1.View all available car offers and their status");
 			System.out.println("2.Make/update an offer for a car");
 			System.out.println("3.View the cars that I own");
 			System.out.println("4.Make Payment for my car");
@@ -120,10 +120,10 @@ public class CustomerFunctions{
 		for (int c=0;c<carListToView.size();c++) {
 			//making the system reject for a new offer if the offer has been placed already
 			//accept offer if and only iff its not accepted(either null or rejected)
-			try {
+			
 				if ((c==ID-1)&&
 						!(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0)){
-					//System.out.println(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0);
+					System.out.println(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0);
 					newCarOffer.setPrice(carListToView.get(c).getPrice());
 					newCarOffer.setMilage(carListToView.get(c).getMilage());
 					newCarOffer.setNoOfOwners(carListToView.get(c).getNoOfOwners());
@@ -147,8 +147,6 @@ public class CustomerFunctions{
 				}else if ((c==ID-1)&&(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0)) {
 					System.out.println("\nThis car is no longer available for making offers\n");
 				}
-			} catch (java.lang.NullPointerException e) {
-			}
 		}
 		carListToView.addAll(newCarListOffer);
 		//testing
@@ -328,12 +326,12 @@ public class CustomerFunctions{
 				if(carPayment.getLoandata().getVIN().equals(VIN)) {
 					System.out.println("Below are the details of the loan");
 					System.out.println(
-							"\n"+carPayment.getLoandata().getOwner()+
-							"\n"+carPayment.getLoandata().getVIN()+
-							"\n"+carPayment.getLoandata().getModel()+
-							"\n"+carPayment.getLoandata().getPrincipal()+
-							"\n"+carPayment.getLoandata().getTermInMonths()+
-							"\n"+carPayment.getLoandata().getInterestRate()
+							"\nOffer By:"+carPayment.getLoandata().getOwner()+
+							"\nVIN:"+carPayment.getLoandata().getVIN()+
+							"\nCar Model:"+carPayment.getLoandata().getModel()+
+							"\nCar Price:"+carPayment.getLoandata().getPrincipal()+
+							"\nTotal No Of Month To Complete the payments:"+carPayment.getLoandata().getTermInMonths()+
+							"\nAPR:"+carPayment.getLoandata().getInterestRate()
 							);
 					montlyPaymentSchedule=carPayment.getMontlyPaymentSchedule();
 					System.out.println("Month   "+"Monthly Installation Amount    "+"Interest to be paid     "+"Principal  to be paid    "+"Balance");

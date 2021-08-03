@@ -3,11 +3,17 @@ package com.techllenapps.cardealershipconsoleapp.entities;
 import java.io.Serializable;
 
 public class MonthlyPayment implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7207711772660728948L;
 	private int month;
 	private double monthlyInstallation;
 	private double interestToBePaid;
 	private double principalToBePaid;
 	private double Balance;
+	private double amountPaid;
+
 	
 	public int getMonth() {
 		return month;
@@ -39,12 +45,16 @@ public class MonthlyPayment implements Serializable{
 	public void setBalance(double balance) {
 		Balance = balance;
 	}
+	public double getAmountPaid() {
+		return amountPaid;
+	}
+	public void setAmountPaid(double amountPaid) {
+		this.amountPaid = amountPaid;
+	}
 	@Override
 	public String toString() {
-		return "MontlyPaymentSchedule [month=" + month + ", monthlyInstallation=" + monthlyInstallation
-				+ ", interestToBePaid=" + interestToBePaid + ", principalToBePaid=" + principalToBePaid + ", Balance="
-				+ Balance + "]";
+		return "MonthlyPayment [month=" + month + ", monthlyInstallation=" + monthlyInstallation + ", interestToBePaid="
+				+ interestToBePaid + ", principalToBePaid=" + principalToBePaid + ", Balance=" + Balance
+				+ ", amountPaid=" + amountPaid + "]";
 	}
-	
-	
 }

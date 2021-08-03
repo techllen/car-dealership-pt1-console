@@ -141,7 +141,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 			car.setAmountOffered(0.0);
 
 			//setting default offer status to 
-			car.setOfferStatus(null);
+			car.setOfferStatus(OfferStatus.pending);
 		} catch (java.lang.IllegalArgumentException e) {
 			System.out.println("Enter the required Input");
 			UserFunctions.mainMenu();
@@ -227,7 +227,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 				offerStatus = sc.nextLine();
 				setOfferStatusToCar(ID, offerStatus);
 			} catch (Exception e) {
-				System.out.println("Please enter accepted or rejected");			
+				System.out.println("Please enter accepted to accept the offer");			
 			}	
 		}
 	}

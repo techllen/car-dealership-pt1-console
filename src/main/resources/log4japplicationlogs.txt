@@ -285,3 +285,13 @@
 2021-08-03 02:12:57 INFO – Customer kilo Logged In
 2021-08-03 02:16:24 INFO – Customer kilo Logged In
 2021-08-03 02:17:12 INFO – Customer kilo Logged In
+2021-08-03 02:20:23 INFO – Customer kilo Logged In
+2021-08-03 02:21:21 INFO – Employee allen Logged In
+2021-08-03 02:21:25 INFO – car with vin numbernullhas been removed bynull
+2021-08-03 02:21:31 INFO – car with vin numbernullhas been removed bynull
+2021-08-03 02:22:09 INFO – Customer kilo Logged In
+2021-08-03 02:24:08 INFO – Customer kilo Logged In
+2021-08-03 02:25:10 INFO – Customer kilo Logged In
+2021-08-03 02:28:01 INFO – Employee allen Logged In
+2021-08-03 02:30:30 INFO – Customer kilo Logged In
+2021-08-03 02:36:58 INFO – Customer kilo Logged In
