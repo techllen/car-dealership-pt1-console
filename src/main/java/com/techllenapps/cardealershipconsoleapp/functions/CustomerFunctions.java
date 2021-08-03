@@ -119,34 +119,37 @@ public class CustomerFunctions{
 		Car newCarOffer = new Car();
 		for (int c=0;c<carListToView.size();c++) {
 			//making the system reject for a new offer if the offer has been placed already
-			//accept offer if and only iff its not accepted
-			if ((c==ID-1)&&(carListToView.get(c).getOfferStatus().compareTo(null)==0)){
-				//System.out.println(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0);
-				newCarOffer.setPrice(carListToView.get(c).getPrice());
-				newCarOffer.setMilage(carListToView.get(c).getMilage());
-				newCarOffer.setNoOfOwners(carListToView.get(c).getNoOfOwners());
-				newCarOffer.setColor(carListToView.get(c).getColor());
-				newCarOffer.setDriveTrain(carListToView.get(c).getDriveTrain());
-				newCarOffer.setFuelType(carListToView.get(c).getFuelType());
-				newCarOffer.setTransmission(carListToView.get(c).getTransmission());
-				newCarOffer.setVIN(carListToView.get(c).getVIN());
-				newCarOffer.setLocation(carListToView.get(c).getLocation());
-				newCarOffer.setYear(carListToView.get(c).getYear());
-				newCarOffer.setModel(carListToView.get(c).getModel());
-				newCarOffer.setDatePosted(carListToView.get(c).getDatePosted());
-				newCarOffer.setOfferStatus(null);
-				newCarOffer.setCarPaymet(carListToView.get(c).getCarPaymet());
-				newCarOffer.setAmountOffered(amountOffered);
-				newCarOffer.setOfferMadeBy(userInSession);
-				//testing
-				System.out.println("\n******"+newCarOffer);
-				System.out.println("\n******"+carListToView + "\n******"+carListToView.size() );
-				newCarListOffer.add(newCarOffer);
-			}else if ((c==ID-1)&&(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0)) {
-				System.out.println("\nThis car is no longer available for making offers");
+			//accept offer if and only iff its not accepted(either null or rejected)
+			try {
+				if ((c==ID-1)&&
+						!(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0)){
+					//System.out.println(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0);
+					newCarOffer.setPrice(carListToView.get(c).getPrice());
+					newCarOffer.setMilage(carListToView.get(c).getMilage());
+					newCarOffer.setNoOfOwners(carListToView.get(c).getNoOfOwners());
+					newCarOffer.setColor(carListToView.get(c).getColor());
+					newCarOffer.setDriveTrain(carListToView.get(c).getDriveTrain());
+					newCarOffer.setFuelType(carListToView.get(c).getFuelType());
+					newCarOffer.setTransmission(carListToView.get(c).getTransmission());
+					newCarOffer.setVIN(carListToView.get(c).getVIN());
+					newCarOffer.setLocation(carListToView.get(c).getLocation());
+					newCarOffer.setYear(carListToView.get(c).getYear());
+					newCarOffer.setModel(carListToView.get(c).getModel());
+					newCarOffer.setDatePosted(carListToView.get(c).getDatePosted());
+					newCarOffer.setOfferStatus(null);
+					newCarOffer.setCarPaymet(carListToView.get(c).getCarPaymet());
+					newCarOffer.setAmountOffered(amountOffered);
+					newCarOffer.setOfferMadeBy(userInSession);
+					//testing
+					System.out.println("\n******"+newCarOffer);
+					System.out.println("\n******"+carListToView + "\n******"+carListToView.size() );
+					newCarListOffer.add(newCarOffer);
+				}else if ((c==ID-1)&&(carListToView.get(c).getOfferStatus().compareTo(Car.OfferStatus.accepted)==0)) {
+					System.out.println("\nThis car is no longer available for making offers\n");
+				}
+			} catch (java.lang.NullPointerException e) {
 			}
 		}
-
 		carListToView.addAll(newCarListOffer);
 		//testing
 		//System.out.println(carListToView);
@@ -314,36 +317,40 @@ public class CustomerFunctions{
 	}
 
 	public static void viewPayMentSchedule() throws ClassNotFoundException, IOException {
-		viewCarsThatIOwn();
-		ArrayList<MonthlyPayment> montlyPaymentSchedule = new ArrayList<MonthlyPayment>();
-		System.out.println("Enter the VIN of the car to view specific repayment schedule");
-		Scanner sc3 = new Scanner(System.in);
-		String VIN = sc3.nextLine();
-		carPayMentList=extractCarPayMentsFromFile();
-		for (CarPayment carPayment : carPayMentList) {
-			if(carPayment.getLoandata().getVIN().equals(VIN)) {
-				System.out.println("Below are the details of the loan");
-				System.out.println(
-						"\n"+carPayment.getLoandata().getOwner()+
-						"\n"+carPayment.getLoandata().getVIN()+
-						"\n"+carPayment.getLoandata().getModel()+
-						"\n"+carPayment.getLoandata().getPrincipal()+
-						"\n"+carPayment.getLoandata().getTermInMonths()+
-						"\n"+carPayment.getLoandata().getInterestRate()
-						);
-				montlyPaymentSchedule=carPayment.getMontlyPaymentSchedule();
-				System.out.println("Month   "+"Monthly Installation Amount    "+"Interest to be paid     "+"Principal  to be paid    "+"Balance");
-				for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
+		try {
+			viewCarsThatIOwn();
+			ArrayList<MonthlyPayment> montlyPaymentSchedule = new ArrayList<MonthlyPayment>();
+			System.out.println("Enter the VIN of the car to view specific repayment schedule");
+			Scanner sc3 = new Scanner(System.in);
+			String VIN = sc3.nextLine();
+			carPayMentList=extractCarPayMentsFromFile();
+			for (CarPayment carPayment : carPayMentList) {
+				if(carPayment.getLoandata().getVIN().equals(VIN)) {
+					System.out.println("Below are the details of the loan");
 					System.out.println(
-							"\n"+monthlyPayment.getMonth()
-							+monthlyPayment.getMonthlyInstallation()
-							+monthlyPayment.getInterestToBePaid()
-							+monthlyPayment.getPrincipalToBePaid()
-							+monthlyPayment.getBalance()
+							"\n"+carPayment.getLoandata().getOwner()+
+							"\n"+carPayment.getLoandata().getVIN()+
+							"\n"+carPayment.getLoandata().getModel()+
+							"\n"+carPayment.getLoandata().getPrincipal()+
+							"\n"+carPayment.getLoandata().getTermInMonths()+
+							"\n"+carPayment.getLoandata().getInterestRate()
 							);
+					montlyPaymentSchedule=carPayment.getMontlyPaymentSchedule();
+					System.out.println("Month   "+"Monthly Installation Amount    "+"Interest to be paid     "+"Principal  to be paid    "+"Balance");
+					for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
+						System.out.println(
+								"\n"+monthlyPayment.getMonth()
+								+monthlyPayment.getMonthlyInstallation()
+								+monthlyPayment.getInterestToBePaid()
+								+monthlyPayment.getPrincipalToBePaid()
+								+monthlyPayment.getBalance()
+								);
+					}
 				}
 			}
+		} catch (java.io.EOFException e) {
+			System.out.println("Currently the customer has placed no payment");
 		}
-	}
+	}	
 }
 

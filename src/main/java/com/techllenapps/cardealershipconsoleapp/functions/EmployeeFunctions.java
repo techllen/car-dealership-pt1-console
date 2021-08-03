@@ -63,7 +63,8 @@ public class EmployeeFunctions extends Car implements Serializable{
 					break;
 				case 4:
 					viewCars();
-					//CustomerFunctions.viewPayMentSchedule();
+					System.out.println("\n\n");
+					CustomerFunctions.viewPayMentSchedule();
 					break;
 				case 5:
 					//take the user to the main menu
@@ -226,7 +227,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 				offerStatus = sc.nextLine();
 				setOfferStatusToCar(ID, offerStatus);
 			} catch (Exception e) {
-				System.out.println("Please enter accepted or rejected or processing");			
+				System.out.println("Please enter accepted or rejected");			
 			}	
 		}
 	}
@@ -241,7 +242,9 @@ public class EmployeeFunctions extends Car implements Serializable{
 			// 			testing
 			//			System.out.println("\n"+ carListToView);
 			//			System.out.println("\n"+ carListToView.size());
-			System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+"  AmountOffered"+"  OfferStatus");
+			System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+			System.out.println("ID"+"  Model"+"  Price"+"  Milage"+"  NoOfOwners"+"  Color"+"  DriveTrain"+"  FuelType"+"  Transmission"+"  VIN"+"  Location"+"  Year"+"  Model"+"  DatePosted"+" Offer made by"+" AmountOffered"+"  OfferStatus");
+			System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			for (int c=0;c<carListToView.size();c++) {
 				System.out.println(
 						(c+1)
@@ -272,13 +275,13 @@ public class EmployeeFunctions extends Car implements Serializable{
 						+"  "+
 						carListToView.get(c).getDatePosted()
 						+"  "+
-						//carListToView.get(c).getOfferMadeBy()
-						//+"  "+
+						carListToView.get(c).getOfferMadeBy()
+						+"  "+
 						carListToView.get(c).getAmountOffered()
 						+"  "+
 						carListToView.get(c).getOfferStatus()
-
 						);
+				System.out.println("\n\n");
 			}
 		}
 	}
@@ -286,12 +289,13 @@ public class EmployeeFunctions extends Car implements Serializable{
 	public static void setOfferStatusToCar(int ID,String offerStatus) throws ClassNotFoundException, IOException {
 		ArrayList<Car> carListToView = extractCarsFromFile();
 		for (int c=0;c<carListToView.size();c++) {
-			if (c==(ID-1)&&(carListToView.get(c).getAmountOffered()!=null)) {
+			//checks if there is a customer who is offering anything
+			if (c==(ID-1)&&(carListToView.get(c).getAmountOffered()!=0)) {
 				carListToView.get(c).setOfferStatus(OfferStatus.valueOf(offerStatus.toLowerCase()));
 				//testing
 				//System.out.println(carListToView.get(c));
-			}else if(c==(ID-1)&&(carListToView.get(c).getAmountOffered()==null)){
-				System.out.println("there is no amount offered for this car to be bought");
+			}else if(c==(ID-1)&&(carListToView.get(c).getAmountOffered()==0)){
+				System.out.println("\nthere is no amount offered for this car to be bought\n");
 			}
 		}
 		//testing
