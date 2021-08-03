@@ -120,7 +120,20 @@ public class CustomerFunctions{
 			//making the system reject for a new offer if the offer has been placed already
 			//accept offer if and only iff its not accepted
 			if (c==ID-1) {
-				newCarOffer=carListToView.get(c);
+				newCarOffer.setPrice(carListToView.get(c).getPrice());
+				newCarOffer.setMilage(carListToView.get(c).getMilage());
+				newCarOffer.setNoOfOwners(carListToView.get(c).getNoOfOwners());
+				newCarOffer.setColor(carListToView.get(c).getColor());
+				newCarOffer.setDriveTrain(carListToView.get(c).getDriveTrain());
+				newCarOffer.setFuelType(carListToView.get(c).getFuelType());
+				newCarOffer.setTransmission(carListToView.get(c).getTransmission());
+				newCarOffer.setVIN(carListToView.get(c).getVIN());
+				newCarOffer.setLocation(carListToView.get(c).getLocation());
+				newCarOffer.setYear(carListToView.get(c).getYear());
+				newCarOffer.setModel(carListToView.get(c).getModel());
+				newCarOffer.setDatePosted(carListToView.get(c).getDatePosted());
+				newCarOffer.setOfferStatus(null);
+				newCarOffer.setCarPaymet(carListToView.get(c).getCarPaymet());
 				newCarOffer.setAmountOffered(amountOffered);
 				newCarOffer.setOfferMadeBy(userInSession);
 				//testing
