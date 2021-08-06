@@ -14,7 +14,10 @@ public class LoanData implements Serializable{
 	private float interestRate = 0.99F;
 	private float monthlyInterestRate = (0.99F)/(100*paymentsInAYear);
 	private double monthlYPaymentAmount; 
-	//private double monthlYPaymentAmount = (principal)*((monthlyInterestRate*(Math.pow((1+monthlyInterestRate), termInMonths)))/((Math.pow((1+monthlyInterestRate), termInMonths)-1)));
+	private double totalInterestToBePaid=0.0;
+	private double totalPrincipalToBePaid=0.0;
+	private double totalLoanAmount=0.0;
+
 	public String getOwner() {
 		return owner;
 	}
@@ -63,12 +66,34 @@ public class LoanData implements Serializable{
 	public void setMonthlYPaymentAmount(double monthlYPaymentAmount) {
 		this.monthlYPaymentAmount = monthlYPaymentAmount;
 	}
+	public double getTotalInterestToBePaid() {
+		return totalInterestToBePaid;
+	}
+	public void setTotalInterestToBePaid(double totalInterestToBePaid) {
+		this.totalInterestToBePaid = totalInterestToBePaid;
+	}
+	public double getTotalPrincipalToBePaid() {
+		return totalPrincipalToBePaid;
+	}
+	public void setTotalPrincipalToBePaid(double totalPrincipalToBePaid) {
+		this.totalPrincipalToBePaid = totalPrincipalToBePaid;
+	}
+	
+	public double getTotalLoanAmount() {
+		return totalLoanAmount;
+	}
+	public void setTotalLoanAmount(double totalLoanAmount) {
+		this.totalLoanAmount = totalLoanAmount;
+	}
 	@Override
 	public String toString() {
 		return "LoanData [owner=" + owner + ", VIN=" + VIN + ", model=" + model + ", principal=" + principal
-				+ ", termInMonths=" + termInMonths + ", interestRate=" + interestRate + ", monthlyInterestRate="
-				+ monthlyInterestRate + ", monthlYPaymentAmount=" + monthlYPaymentAmount + "]";
+				+ ", termInMonths=" + termInMonths + ", paymentsInAYear=" + paymentsInAYear + ", interestRate="
+				+ interestRate + ", monthlyInterestRate=" + monthlyInterestRate + ", monthlYPaymentAmount="
+				+ monthlYPaymentAmount + ", totalInterestToBePaid=" + totalInterestToBePaid
+				+ ", totalPrincipalToBePaid=" + totalPrincipalToBePaid + ", totalLoanAmount=" + totalLoanAmount + "]";
 	}
-
+	
+	
 
 }

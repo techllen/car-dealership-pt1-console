@@ -7,46 +7,33 @@ public class PaymentHistory implements Serializable{
 	/**
 	 * THE-Techllen the Allen
 	 */
-	private static final long serialVersionUID = 8052021L;
-	private int month;
-	private Date datePaid;
-	private double monthlyInstallation;
-	private double interestToBePaid;
-	private double principalToBePaid;
-	private double Balance;
-	private double amountPaid;
+	private static final long serialVersionUID = 80520212L;
+	private Date transactionDate;
+	
+	private double debit=0.0;
+	private double credit=0.0;
+	private double Balance=0.0;
+	private double amountPaid=0.0;
 	private double totalAmountPaid=0.0;
-	private double remainingAmountToBePaid;
-	private double totalLoanAmount;
-	public int getMonth() {
-		return month;
+	private double remainingAmountToBePaid=0.0;
+	public Date getTransactionDate() {
+		return transactionDate;
 	}
-	public void setMonth(int month) {
-		this.month = month;
+	public void setTransactionDate(Date transactionDate) {
+		this.transactionDate = transactionDate;
 	}
-	public Date getDatePaid() {
-		return datePaid;
+	
+	public double getDebit() {
+		return debit;
 	}
-	public void setDatePaid(Date datePaid) {
-		this.datePaid = datePaid;
+	public void setDebit(double debit) {
+		this.debit = debit;
 	}
-	public double getMonthlyInstallation() {
-		return monthlyInstallation;
+	public double getCredit() {
+		return credit;
 	}
-	public void setMonthlyInstallation(double monthlyInstallation) {
-		this.monthlyInstallation = monthlyInstallation;
-	}
-	public double getInterestToBePaid() {
-		return interestToBePaid;
-	}
-	public void setInterestToBePaid(double interestToBePaid) {
-		this.interestToBePaid = interestToBePaid;
-	}
-	public double getPrincipalToBePaid() {
-		return principalToBePaid;
-	}
-	public void setPrincipalToBePaid(double principalToBePaid) {
-		this.principalToBePaid = principalToBePaid;
+	public void setCredit(double credit) {
+		this.credit = credit;
 	}
 	public double getBalance() {
 		return Balance;
@@ -72,18 +59,11 @@ public class PaymentHistory implements Serializable{
 	public void setRemainingAmountToBePaid(double remainingAmountToBePaid) {
 		this.remainingAmountToBePaid = remainingAmountToBePaid;
 	}
-	public double getTotalLoanAmount() {
-		return totalLoanAmount;
-	}
-	public void setTotalLoanAmount(double totalLoanAmount) {
-		this.totalLoanAmount = totalLoanAmount;
-	}
 	@Override
 	public String toString() {
-		return "PaymentHistory [month=" + month + ", datePaid=" + datePaid + ", monthlyInstallation="
-				+ monthlyInstallation + ", interestToBePaid=" + interestToBePaid + ", principalToBePaid="
-				+ principalToBePaid + ", Balance=" + Balance + ", amountPaid=" + amountPaid + ", totalAmountPaid="
-				+ totalAmountPaid + ", remainingAmountToBePaid=" + remainingAmountToBePaid + ", totalLoanAmount="
-				+ totalLoanAmount + "]";
+		return "PaymentHistory [transactionDate=" + transactionDate + ", debit=" + debit + ", credit=" + credit
+				+ ", Balance=" + Balance + ", amountPaid=" + amountPaid + ", totalAmountPaid=" + totalAmountPaid
+				+ ", remainingAmountToBePaid=" + remainingAmountToBePaid + "]";
 	}
+	
 }

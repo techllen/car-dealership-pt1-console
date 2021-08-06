@@ -297,3 +297,17 @@
 2021-08-03 02:36:58 INFO – Customer kilo Logged In
 2021-08-05 19:18:27 INFO – Customer kilo Logged In
 2021-08-05 19:26:43 INFO – Customer kilo Logged In
+2021-08-06 19:08:45 INFO – Customer kilo Logged In
+2021-08-06 19:10:39 INFO – Customer kilo Logged In
+2021-08-06 19:16:04 INFO – Customer kilo Logged In
+2021-08-06 19:17:18 INFO – Customer kilo Logged In
+2021-08-06 19:20:50 INFO – Customer kilo Logged In
+2021-08-06 19:22:06 INFO – Customer kilo Logged In
+2021-08-06 19:22:46 INFO – Customer kilo Logged In
+2021-08-06 19:23:52 INFO – Employee allen Logged In
+2021-08-06 19:24:44 INFO – Customer kilo Logged In
+2021-08-06 19:26:59 INFO – Employee allen Logged In
+2021-08-06 19:27:27 INFO – Customer kilo Logged In
+2021-08-06 19:29:45 INFO – Employee allen Logged In
+2021-08-06 19:30:14 INFO – Customer kilo Logged In
+2021-08-06 19:32:11 INFO – Customer kilo Logged In
