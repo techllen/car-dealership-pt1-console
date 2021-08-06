@@ -15,7 +15,7 @@ public class PaymentHistory implements Serializable{
 	private double principalToBePaid;
 	private double Balance;
 	private double amountPaid;
-	private double totalAmountPaid;
+	private double totalAmountPaid=0.0;
 	private double remainingAmountToBePaid;
 	private double totalLoanAmount;
 	public int getMonth() {

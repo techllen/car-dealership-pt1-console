@@ -18,6 +18,7 @@ import com.techllenapps.cardealershipconsoleapp.entities.CarPayment;
 import com.techllenapps.cardealershipconsoleapp.entities.LoanData;
 import com.techllenapps.cardealershipconsoleapp.entities.MonthlyPayment;
 import com.techllenapps.cardealershipconsoleapp.entities.PaymentHistory;
+import com.techllenapps.cardealershipconsoleapp.entities.PaymentHistory2;
 import com.techllenapps.cardealershipconsoleapp.entities.Car.OfferStatus;
 
 public class CustomerFunctions{
@@ -259,11 +260,48 @@ public class CustomerFunctions{
 		return carPayment;	
 	}
 	
-	public static CarPayment processBankStatement(String VIN,Double amountPaid) throws ClassNotFoundException, IOException {
+//	public static CarPayment processBankStatement(String VIN,Double amountPaid) throws ClassNotFoundException, IOException {
+//		CarPayment carPayment = new CarPayment();
+//		LoanData loandata = new LoanData();
+//
+//		ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>(60);
+//		ArrayList<Car> extractedCars = EmployeeFunctions.extractCarsFromFile();
+//		Date today = new Date();
+//		for (Car car : extractedCars) {
+//			if(car.getVIN().equals(VIN)) {
+//				loandata.setOwner(car.getOfferMadeBy());
+//				loandata.setVIN(car.getVIN());
+//				loandata.setModel(car.getModel());
+//				loandata.setPrincipal(car.getPrice());
+//				double monthlYPaymentAmount;
+//				monthlYPaymentAmount=(loandata.getPrincipal())*((loandata.getMonthlyInterestRate()*(Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths())))/((Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths()))-1));
+//				loandata.setMonthlYPaymentAmount(monthlYPaymentAmount);
+//				carPayment.setLoandata(loandata);
+//				for ( int month=0;month<61;month++) {
+//					if (month>0) {
+//						PaymentHistory paymentHistory = new PaymentHistory();
+//						paymentHistory.setAmountPaid(monthlYPaymentAmount);
+//						paymentHistory.setMonth(month);
+//						paymentHistory.setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
+//						paymentHistory.setBalance((loandata.getPrincipal()-((month-1)*paymentHistory.getMonthlyInstallation()))-paymentHistory.getMonthlyInstallation());
+//						paymentHistory.setInterestToBePaid(loandata.getMonthlyInterestRate()*paymentHistory.getBalance());
+//						paymentHistory.setPrincipalToBePaid(paymentHistory.getMonthlyInstallation()-paymentHistory.getInterestToBePaid());
+//						paymentHistory.setDatePaid(today);
+//						monthlyPaymentHistory.add(paymentHistory);
+//					}
+//				}
+//				carPayment.setMonthlyPaymentHistory(monthlyPaymentHistory);
+//			}
+//		}
+//		return carPayment;	
+//	}
+	
+	public static  void processBankStatement2() throws ClassNotFoundException, IOException {
+		String VIN = "KJLFAJ897JJKHJKH8978";
 		CarPayment carPayment = new CarPayment();
 		LoanData loandata = new LoanData();
-
-		ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>(60);
+		
+		ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>();
 		ArrayList<Car> extractedCars = EmployeeFunctions.extractCarsFromFile();
 		Date today = new Date();
 		for (Car car : extractedCars) {
@@ -272,28 +310,15 @@ public class CustomerFunctions{
 				loandata.setVIN(car.getVIN());
 				loandata.setModel(car.getModel());
 				loandata.setPrincipal(car.getPrice());
-				double monthlYPaymentAmount;
-				monthlYPaymentAmount=(loandata.getPrincipal())*((loandata.getMonthlyInterestRate()*(Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths())))/((Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths()))-1));
+				double monthlYPaymentAmount=(loandata.getPrincipal())*((loandata.getMonthlyInterestRate()*(Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths())))/((Math.pow((1+loandata.getMonthlyInterestRate()), loandata.getTermInMonths()))-1));
 				loandata.setMonthlYPaymentAmount(monthlYPaymentAmount);
 				carPayment.setLoandata(loandata);
-				for ( int month=0;month<61;month++) {
-					if (month>0) {
-						PaymentHistory paymentHistory = new PaymentHistory();
-						paymentHistory.setAmountPaid(monthlYPaymentAmount);
-						paymentHistory.setMonth(month);
-						paymentHistory.setMonthlyInstallation(carPayment.getLoandata().getMonthlYPaymentAmount());
-						paymentHistory.setBalance((loandata.getPrincipal()-((month-1)*paymentHistory.getMonthlyInstallation()))-paymentHistory.getMonthlyInstallation());
-						paymentHistory.setInterestToBePaid(loandata.getMonthlyInterestRate()*paymentHistory.getBalance());
-						paymentHistory.setPrincipalToBePaid(paymentHistory.getMonthlyInstallation()-paymentHistory.getInterestToBePaid());
-						paymentHistory.setDatePaid(today);
-						monthlyPaymentHistory.add(paymentHistory);
-					}
-				}
-				carPayment.setMonthlyPaymentHistory(monthlyPaymentHistory);
+				
+				PaymentHistory2 paymentHistory = new PaymentHistory2();
 			}
 		}
-		return carPayment;	
 	}
+
 
 	public static void updateCarPayment(CarPayment carPayment,String VIN) throws ClassNotFoundException, IOException {
 		ArrayList<Car> updatedCarListWithPayments = EmployeeFunctions.extractCarsFromFile();
@@ -394,43 +419,43 @@ public class CustomerFunctions{
 		}
 	}	
 	
-	public static void viewPaymentHistory() throws ClassNotFoundException, IOException {
-		try {
-			viewCarsThatIOwn();
-			ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>();
-			System.out.println("Enter the VIN of the car to view specific repayment History");
-			Scanner sc3 = new Scanner(System.in);
-			String VIN = sc3.nextLine();
-			carPayMentList=extractCarPayMentsFromFile();
-			for (CarPayment carPayment : carPayMentList) {
-				if(carPayment.getLoandata().getVIN().equals(VIN)) {
-					System.out.println("Below are the details of the loan");
-					System.out.println(
-							"\nOffer By:"+carPayment.getLoandata().getOwner()+
-							"\nVIN:"+carPayment.getLoandata().getVIN()+
-							"\nCar Model:"+carPayment.getLoandata().getModel()+
-							"\nCar Price:"+carPayment.getLoandata().getPrincipal()+
-							"\nTotal No Of Month To Complete the payments:"+carPayment.getLoandata().getTermInMonths()+
-							"\nAPR:"+carPayment.getLoandata().getInterestRate()
-							);
-					monthlyPaymentHistory=carPayment.getMonthlyPaymentHistory();
-					System.out.println("Month   "+"Monthly Installation Amount    "+"Interest to be paid     "+"Principal  to be paid    "+"Balance");
-					for (PaymentHistory paymentHistory : monthlyPaymentHistory) {
-						System.out.println(
-								"\n"+paymentHistory.getMonth()
-								+paymentHistory.getMonthlyInstallation()
-								+paymentHistory.getInterestToBePaid()
-								+paymentHistory.getPrincipalToBePaid()
-								+paymentHistory.getBalance()
-								);
-					}
-				}
-			}
-		} catch (java.io.EOFException e) {
-			System.out.println("Currently the customer has placed no payment");
-		}catch (java.lang.NullPointerException e1) {
-			System.out.println("Please enter the correct VIN");
-		}
-	}
+//	public static void viewPaymentHistory() throws ClassNotFoundException, IOException {
+//		try {
+//			viewCarsThatIOwn();
+//			ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>();
+//			System.out.println("Enter the VIN of the car to view specific repayment History");
+//			Scanner sc3 = new Scanner(System.in);
+//			String VIN = sc3.nextLine();
+//			carPayMentList=extractCarPayMentsFromFile();
+//			for (CarPayment carPayment : carPayMentList) {
+//				if(carPayment.getLoandata().getVIN().equals(VIN)) {
+//					System.out.println("Below are the details of the loan");
+//					System.out.println(
+//							"\nOffer By:"+carPayment.getLoandata().getOwner()+
+//							"\nVIN:"+carPayment.getLoandata().getVIN()+
+//							"\nCar Model:"+carPayment.getLoandata().getModel()+
+//							"\nCar Price:"+carPayment.getLoandata().getPrincipal()+
+//							"\nTotal No Of Month To Complete the payments:"+carPayment.getLoandata().getTermInMonths()+
+//							"\nAPR:"+carPayment.getLoandata().getInterestRate()
+//							);
+//					monthlyPaymentHistory=carPayment.getMonthlyPaymentHistory();
+//					System.out.println("Month   "+"Monthly Installation Amount    "+"Interest to be paid     "+"Principal  to be paid    "+"Balance");
+//					for (PaymentHistory paymentHistory : monthlyPaymentHistory) {
+//						System.out.println(
+//								"\n"+paymentHistory.getMonth()
+//								+paymentHistory.getMonthlyInstallation()
+//								+paymentHistory.getInterestToBePaid()
+//								+paymentHistory.getPrincipalToBePaid()
+//								+paymentHistory.getBalance()
+//								);
+//					}
+//				}
+//			}
+//		} catch (java.io.EOFException e) {
+//			System.out.println("Currently the customer has placed no payment");
+//		}catch (java.lang.NullPointerException e1) {
+//			System.out.println("Please enter the correct VIN");
+//		}
+//	}
 }
 
