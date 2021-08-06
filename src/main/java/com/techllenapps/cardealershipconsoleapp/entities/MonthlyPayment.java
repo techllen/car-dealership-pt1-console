@@ -13,8 +13,16 @@ public class MonthlyPayment implements Serializable{
 	private double principalToBePaid;
 	private double Balance;
 	private double amountPaid;
+	private double totalAmountPaid;
+
 
 	
+	public double getTotalAmountPaid() {
+		return totalAmountPaid;
+	}
+	public void setTotalAmountPaid(double totalAmountPaid) {
+		this.totalAmountPaid = totalAmountPaid;
+	}
 	public int getMonth() {
 		return month;
 	}
@@ -55,6 +63,6 @@ public class MonthlyPayment implements Serializable{
 	public String toString() {
 		return "MonthlyPayment [month=" + month + ", monthlyInstallation=" + monthlyInstallation + ", interestToBePaid="
 				+ interestToBePaid + ", principalToBePaid=" + principalToBePaid + ", Balance=" + Balance
-				+ ", amountPaid=" + amountPaid + "]";
+				+ ", amountPaid=" + amountPaid + ", totalAmountPaid=" + totalAmountPaid + "]";
 	}
 }

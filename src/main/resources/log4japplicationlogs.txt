@@ -295,3 +295,5 @@
 2021-08-03 02:28:01 INFO – Employee allen Logged In
 2021-08-03 02:30:30 INFO – Customer kilo Logged In
 2021-08-03 02:36:58 INFO – Customer kilo Logged In
+2021-08-05 19:18:27 INFO – Customer kilo Logged In
+2021-08-05 19:26:43 INFO – Customer kilo Logged In
