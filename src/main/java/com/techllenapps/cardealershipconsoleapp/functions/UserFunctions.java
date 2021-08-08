@@ -192,7 +192,7 @@ public class UserFunctions extends User{
 				if ((user.getPassWord().equals(passWord)) && (user.getUserName().equals(userName))) {
 					userRole= user.getUserRole();
 				}
-			} catch (NullPointerException e) {
+			} catch (java.lang.NullPointerException e) {
 				System.out.println("The system has no users,See the system Admnistrator for further assistance");
 			}
 		}
