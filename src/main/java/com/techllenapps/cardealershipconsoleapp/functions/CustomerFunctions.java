@@ -65,11 +65,13 @@ public class CustomerFunctions{
 					String VIN = reader.readLine();
 					System.out.println("\nPlease enter the amount that you want to pay int $ e.g 200.75");
 					Double amountPaid = Double.parseDouble(reader.readLine());
-					cp=addPayment(processPayment(VIN),amountPaid);
+					cp=calculateMonthlyPayment(VIN);
 					addFirstCarPayment(cp);
-					System.out.println("\nThank you for paying for this car");
 					updateCarPayment(cp,VIN);
-					System.out.println("Payments added to the records");
+					cp=addPayment(VIN, amountPaid);
+					addFirstCarPayment(cp);
+					updateCarPayment(cp,VIN);
+					System.out.println("\nThank you for paying for this car");
 				}else {
 					viewCarsThatIOwn();
 					CarPayment cp = new CarPayment();
@@ -79,14 +81,13 @@ public class CustomerFunctions{
 					String VIN = reader.readLine();
 					System.out.println("\nPlease enter the amount that you want to pay int $ e.g 200.75");
 					Double amountPaid = Double.parseDouble(reader.readLine());
-					cp=processPayment(VIN);
+					cp=calculateMonthlyPayment(VIN);
 					addOtherCarPayMents(cp);
-					System.out.println("\nThank you for paying for this car");
 					updateCarPayment(cp,VIN);
-					System.out.println("Payments added to the records");
 					cp=addPayment(VIN, amountPaid);
 					addOtherCarPayMents(cp);
 					updateCarPayment(cp,VIN);
+					System.out.println("\nThank you for paying for this car");
 				}
 				break;
 			case 5:
@@ -291,9 +292,8 @@ public class CustomerFunctions{
 	//		return carPayment;
 	//	}
 
-	//below function will process your repayment schedule and add any payments that the customer make 
-	//into the system
-	public static  CarPayment processPayment(String VIN) throws ClassNotFoundException, IOException {
+
+	public static  CarPayment calculateMonthlyPayment(String VIN) throws ClassNotFoundException, IOException {
 		ArrayList<Car> extractedCars = EmployeeFunctions.extractCarsFromFile();
 		CarPayment carPayment = new CarPayment();
 		LoanData loandata = new LoanData();
@@ -355,31 +355,31 @@ public class CustomerFunctions{
 		return carPayment;
 	}
 
-	public static  CarPayment addPayment(CarPayment carPayment,Double amountPaid) throws ClassNotFoundException, IOException {
-		try {
-			ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>();
-			ArrayList<PaymentHistory> previousPaymentHistory  = new ArrayList<PaymentHistory>();
-			Date today = new Date();
-			//To avoid overwriting previous payment history,retrieve it first then append the new one to it
-			previousPaymentHistory = carPayment.getMonthlyPaymentHistory();
-			System.out.println("the old hist is:" + previousPaymentHistory);
-			PaymentHistory paymentHistory = new PaymentHistory();
-			paymentHistory.setCredit(amountPaid);
-			paymentHistory.setTransactionDate(today);
-			monthlyPaymentHistory.add(paymentHistory);
-			//appending the new monthly payment history to the older one
-			monthlyPaymentHistory.addAll(previousPaymentHistory);
-			carPayment.setMonthlyPaymentHistory(monthlyPaymentHistory);
-			//						System.out.println(paymentHistory);
-			System.out.println(carPayment);
+	//	public static  CarPayment addPayment(CarPayment carPayment,Double amountPaid) throws ClassNotFoundException, IOException {
+	//		try {
+	//			ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>();
+	//			ArrayList<PaymentHistory> previousPaymentHistory  = new ArrayList<PaymentHistory>();
+	//			Date today = new Date();
+	//			//To avoid overwriting previous payment history,retrieve it first then append the new one to it
+	//			previousPaymentHistory = carPayment.getMonthlyPaymentHistory();
+	//			System.out.println("the old hist is:" + previousPaymentHistory);
+	//			PaymentHistory paymentHistory = new PaymentHistory();
+	//			paymentHistory.setCredit(amountPaid);
+	//			paymentHistory.setTransactionDate(today);
+	//			monthlyPaymentHistory.add(paymentHistory);
+	//			//appending the new monthly payment history to the older one
+	//			monthlyPaymentHistory.addAll(previousPaymentHistory);
+	//			carPayment.setMonthlyPaymentHistory(monthlyPaymentHistory);
+	//			//						System.out.println(paymentHistory);
+	//			System.out.println(carPayment);
+	//
+	//		}
+	//		//the below will catch all cars with offerstatus value other than accepted and empty peyment history
+	//		catch (java.lang.NullPointerException e) {
+	//		}
+	//		return carPayment;
+	//	}
 
-		}
-		//the below will catch all cars with offerstatus value other than accepted and empty peyment history
-		catch (java.lang.NullPointerException e) {
-		}
-		return carPayment;
-	}
-	
 	public static  CarPayment addPayment(String VIN,Double amountPaid) throws ClassNotFoundException, IOException {
 		CarPayment carPayment = new CarPayment();
 
@@ -388,23 +388,172 @@ public class CustomerFunctions{
 			ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>();
 			ArrayList<PaymentHistory> previousPaymentHistory  = new ArrayList<PaymentHistory>();
 			Date today = new Date();
-			for (CarPayment carPayment : carPayMentList) {
-				if(carPayment.getLoandata().getVIN().equals(VIN)) {
+			for (CarPayment carPaymentFromFile : carPayMentList) {
+				if(carPaymentFromFile.getLoandata().getVIN().equals(VIN)) {
+					carPayment=carPaymentFromFile;
+					System.out.println("file car payment:" + carPayment);
 					previousPaymentHistory=carPayment.getMonthlyPaymentHistory();
 					//testing
-					System.out.println(monthlyPaymentHistory.size());
-					System.out.println(monthlyPaymentHistory);
 					System.out.println("the old hist is:" + previousPaymentHistory);
 					PaymentHistory paymentHistory = new PaymentHistory();
 					paymentHistory.setCredit(amountPaid);
 					paymentHistory.setTransactionDate(today);
 					monthlyPaymentHistory.add(paymentHistory);
+					System.out.println("monthlyPaymentHistory:"+monthlyPaymentHistory);
 					//appending the new monthly payment history to the older one
 					monthlyPaymentHistory.addAll(previousPaymentHistory);
 					carPayment.setMonthlyPaymentHistory(monthlyPaymentHistory);
 					//						System.out.println(paymentHistory);
 					System.out.println(carPayment);
-					
+				}
+			}
+		}catch (java.io.EOFException e) {
+			System.out.println("Please enter the correct VIN or there are no payments for this car or the offer has not been accepted yet");
+		}
+		return carPayment;
+	}
+
+
+	public static void updateCarPayment(CarPayment carPayment,String VIN) throws ClassNotFoundException, IOException {
+		ArrayList<Car> updatedCarListWithPayments = EmployeeFunctions.extractCarsFromFile();
+
+		for (Car car : updatedCarListWithPayments) {
+			if(car.getVIN().equals(VIN)) {
+				car.setCarPaymet(carPayment);
+			}
+		}
+		EmployeeFunctions.updateCar(updatedCarListWithPayments);
+	}
+
+	public static void addFirstCarPayment(CarPayment firstcarpayment) throws ClassNotFoundException, IOException{
+		ArrayList<CarPayment> carPaymentListToFile = new ArrayList<CarPayment>();
+		carPaymentListToFile.add(firstcarpayment);
+		FileOutputStream fis = new FileOutputStream(filePathForCarPayment);
+		ObjectOutputStream oos = new ObjectOutputStream(fis);
+		oos.writeObject(carPaymentListToFile);
+	}
+
+	public static void addOtherCarPayMents(CarPayment carpayment) throws ClassNotFoundException, IOException{
+		carPayMentList=extractCarPayMentsFromFile();
+		ArrayList<CarPayment> carPaymentListToFile = new ArrayList<CarPayment>();
+		carPaymentListToFile.add(carpayment);
+		carPaymentListToFile.addAll(carPaymentListToFile);
+		removeDuplicatesCarPayment(carPaymentListToFile);
+		FileOutputStream fis = new FileOutputStream(filePathForCarPayment);
+		ObjectOutputStream oos = new ObjectOutputStream(fis);
+		oos.writeObject(carPaymentListToFile);
+	}
+
+	public static ArrayList<CarPayment> extractCarPayMentsFromFile() throws ClassNotFoundException, IOException {
+		FileInputStream fis = new FileInputStream(filePathForCarPayment);
+		ObjectInputStream ois=new ObjectInputStream(fis);
+		carPayMentList=(ArrayList<CarPayment>)ois.readObject();
+		return carPayMentList;
+	}
+
+	public static ArrayList<CarPayment> removeDuplicatesCarPayment(ArrayList<CarPayment> carPayMentList)
+	{
+		ArrayList<CarPayment> noDuplicateCarPaymentList = new ArrayList<CarPayment>();
+		for (CarPayment carpayment : noDuplicateCarPaymentList) {
+			if (!noDuplicateCarPaymentList.contains(carpayment)) {
+				noDuplicateCarPaymentList.add(carpayment);
+			}	
+		}
+		return noDuplicateCarPaymentList;
+	}
+
+	//checking of the file is empty 
+	public static boolean checkCarPayMent() {
+		boolean paymentAvailable=false;
+		File file = new File(filePathForCarPayment);
+		if (file.length() == 0) {
+			paymentAvailable=false;
+		}else{
+			paymentAvailable=true;
+		}	
+		return paymentAvailable;
+	}
+
+	public static void viewPayMentSchedule() throws ClassNotFoundException, IOException {
+		try {
+			ArrayList<MonthlyPayment> montlyPaymentSchedule = new ArrayList<MonthlyPayment>();
+			System.out.println("Enter the VIN of the car to view specific repayment schedule");
+			Scanner sc3 = new Scanner(System.in);
+			String VIN = sc3.nextLine();
+			carPayMentList=extractCarPayMentsFromFile();
+			for (CarPayment carPayment : carPayMentList) {
+				if(carPayment.getLoandata().getVIN().equals(VIN)) {
+					System.out.println("Below are the details of the loan");
+					System.out.println(
+							"\nOffer By:"+carPayment.getLoandata().getOwner()+
+							"\nVIN:"+carPayment.getLoandata().getVIN()+
+							"\nCar Model:"+carPayment.getLoandata().getModel()+
+							"\nCar Price:"+carPayment.getLoandata().getPrincipal()+
+							"\nTotal No Of Month To Complete the payments:"+carPayment.getLoandata().getTermInMonths()+
+							"\nAPR:"+carPayment.getLoandata().getInterestRate()
+							);
+					montlyPaymentSchedule=carPayment.getMontlyPaymentSchedule();
+					System.out.println("Month   "+"Monthly Installation Amount    "+"Interest to be paid     "+"Principal  to be paid    "+"Balance");
+					for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
+						System.out.println(
+								"\n"+monthlyPayment.getMonth()
+								+monthlyPayment.getMonthlyInstallation()
+								+monthlyPayment.getInterestToBePaid()
+								+monthlyPayment.getPrincipalToBePaid()
+								+monthlyPayment.getBalance()
+								);
+					}
+				}
+			}
+		} catch (java.io.EOFException e) {
+			System.out.println("Currently the customer has placed no payment");
+		}catch (java.lang.NullPointerException e1) {
+			System.out.println("Please enter the correct VIN");
+		}
+	}	
+
+	public static void viewPaymentHistory() throws ClassNotFoundException, IOException {
+		try {
+			ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>();
+			System.out.println("Enter the VIN of the car to view specific payment History");
+			//Buffered reader was used as alternative to input to the function because scanner could not work
+			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+			String VIN = reader.readLine();
+			carPayMentList=extractCarPayMentsFromFile();
+			//testing
+			System.out.println(carPayMentList);
+			System.out.println(VIN);
+			for (CarPayment carPayment : carPayMentList) {
+				if(carPayment.getLoandata().getVIN().equals(VIN)) {
+					System.out.println("Below are the details of the loan");
+					System.out.println(
+							"\nOffer By:"+carPayment.getLoandata().getOwner()+
+							"\nVIN:"+carPayment.getLoandata().getVIN()+
+							"\nCar Model:"+carPayment.getLoandata().getModel()+
+							"\nCar Price:"+carPayment.getLoandata().getPrincipal()+
+							"\nTotal No Of Month To Complete the payments:"+carPayment.getLoandata().getTermInMonths()+
+							"\nAPR:"+carPayment.getLoandata().getInterestRate()
+							+"\n\n"
+							);
+					monthlyPaymentHistory=carPayment.getMonthlyPaymentHistory();
+					//testing
+					System.out.println(monthlyPaymentHistory.size());
+					System.out.println(monthlyPaymentHistory);
+					Double total = 0.0;
+					System.out.println("Transaction Date   "+"Debit   "+"Credit    "+"Balance");
+
+					for (int z=0;z<monthlyPaymentHistory.size();z++) {
+						System.out.println(
+								"\n"+monthlyPaymentHistory.get(z).getTransactionDate()
+								+monthlyPaymentHistory.get(z).getDebit()
+								+monthlyPaymentHistory.get(z).getCredit()
+								+monthlyPaymentHistory.get(z).getBalance()
+								);
+						total = monthlyPaymentHistory.get(z).getTotalAmountPaid();  
+						total=monthlyPaymentHistory.get(z).getAmountPaid()+total;
+					}
+					System.out.println("Total Amount paid for the loan is:"+ total);
+					System.out.println("Remaining total Amount to be paid for the loan is:"+ (carPayment.getLoandata().getTotalLoanAmount()-total ));
 				}
 			}
 		}catch (java.io.EOFException e) {
@@ -413,158 +562,6 @@ public class CustomerFunctions{
 			System.out.println("Please enter the correct VIN or there are no payments for this car or the offer has not been accepted yet");
 			e1.printStackTrace();
 		}
-		return carPayment;
 	}
-	
-
-public static void updateCarPayment(CarPayment carPayment,String VIN) throws ClassNotFoundException, IOException {
-	ArrayList<Car> updatedCarListWithPayments = EmployeeFunctions.extractCarsFromFile();
-
-	for (Car car : updatedCarListWithPayments) {
-		if(car.getVIN().equals(VIN)) {
-			car.setCarPaymet(carPayment);
-		}
-	}
-	EmployeeFunctions.updateCar(updatedCarListWithPayments);
-}
-
-public static void addFirstCarPayment(CarPayment firstcarpayment) throws ClassNotFoundException, IOException{
-	ArrayList<CarPayment> carPaymentListToFile = new ArrayList<CarPayment>();
-	carPaymentListToFile.add(firstcarpayment);
-	FileOutputStream fis = new FileOutputStream(filePathForCarPayment);
-	ObjectOutputStream oos = new ObjectOutputStream(fis);
-	oos.writeObject(carPaymentListToFile);
-}
-
-public static void addOtherCarPayMents(CarPayment carpayment) throws ClassNotFoundException, IOException{
-	carPayMentList=extractCarPayMentsFromFile();
-	ArrayList<CarPayment> carPaymentListToFile = new ArrayList<CarPayment>();
-	carPaymentListToFile.add(carpayment);
-	carPaymentListToFile.addAll(carPaymentListToFile);
-	removeDuplicatesCarPayment(carPaymentListToFile);
-	FileOutputStream fis = new FileOutputStream(filePathForCarPayment);
-	ObjectOutputStream oos = new ObjectOutputStream(fis);
-	oos.writeObject(carPaymentListToFile);
-}
-
-public static ArrayList<CarPayment> extractCarPayMentsFromFile() throws ClassNotFoundException, IOException {
-	FileInputStream fis = new FileInputStream(filePathForCarPayment);
-	ObjectInputStream ois=new ObjectInputStream(fis);
-	carPayMentList=(ArrayList<CarPayment>)ois.readObject();
-	return carPayMentList;
-}
-
-public static ArrayList<CarPayment> removeDuplicatesCarPayment(ArrayList<CarPayment> carPayMentList)
-{
-	ArrayList<CarPayment> noDuplicateCarPaymentList = new ArrayList<CarPayment>();
-	for (CarPayment carpayment : noDuplicateCarPaymentList) {
-		if (!noDuplicateCarPaymentList.contains(carpayment)) {
-			noDuplicateCarPaymentList.add(carpayment);
-		}	
-	}
-	return noDuplicateCarPaymentList;
-}
-
-//checking of the file is empty 
-public static boolean checkCarPayMent() {
-	boolean paymentAvailable=false;
-	File file = new File(filePathForCarPayment);
-	if (file.length() == 0) {
-		paymentAvailable=false;
-	}else{
-		paymentAvailable=true;
-	}	
-	return paymentAvailable;
-}
-
-public static void viewPayMentSchedule() throws ClassNotFoundException, IOException {
-	try {
-		ArrayList<MonthlyPayment> montlyPaymentSchedule = new ArrayList<MonthlyPayment>();
-		System.out.println("Enter the VIN of the car to view specific repayment schedule");
-		Scanner sc3 = new Scanner(System.in);
-		String VIN = sc3.nextLine();
-		carPayMentList=extractCarPayMentsFromFile();
-		for (CarPayment carPayment : carPayMentList) {
-			if(carPayment.getLoandata().getVIN().equals(VIN)) {
-				System.out.println("Below are the details of the loan");
-				System.out.println(
-						"\nOffer By:"+carPayment.getLoandata().getOwner()+
-						"\nVIN:"+carPayment.getLoandata().getVIN()+
-						"\nCar Model:"+carPayment.getLoandata().getModel()+
-						"\nCar Price:"+carPayment.getLoandata().getPrincipal()+
-						"\nTotal No Of Month To Complete the payments:"+carPayment.getLoandata().getTermInMonths()+
-						"\nAPR:"+carPayment.getLoandata().getInterestRate()
-						);
-				montlyPaymentSchedule=carPayment.getMontlyPaymentSchedule();
-				System.out.println("Month   "+"Monthly Installation Amount    "+"Interest to be paid     "+"Principal  to be paid    "+"Balance");
-				for (MonthlyPayment monthlyPayment : montlyPaymentSchedule) {
-					System.out.println(
-							"\n"+monthlyPayment.getMonth()
-							+monthlyPayment.getMonthlyInstallation()
-							+monthlyPayment.getInterestToBePaid()
-							+monthlyPayment.getPrincipalToBePaid()
-							+monthlyPayment.getBalance()
-							);
-				}
-			}
-		}
-	} catch (java.io.EOFException e) {
-		System.out.println("Currently the customer has placed no payment");
-	}catch (java.lang.NullPointerException e1) {
-		System.out.println("Please enter the correct VIN");
-	}
-}	
-
-public static void viewPaymentHistory() throws ClassNotFoundException, IOException {
-	try {
-		ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>();
-		System.out.println("Enter the VIN of the car to view specific payment History");
-		//Buffered reader was used as alternative to input to the function because scanner could not work
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		String VIN = reader.readLine();
-		carPayMentList=extractCarPayMentsFromFile();
-		//testing
-		System.out.println(carPayMentList);
-		System.out.println(VIN);
-		for (CarPayment carPayment : carPayMentList) {
-			if(carPayment.getLoandata().getVIN().equals(VIN)) {
-				System.out.println("Below are the details of the loan");
-				System.out.println(
-						"\nOffer By:"+carPayment.getLoandata().getOwner()+
-						"\nVIN:"+carPayment.getLoandata().getVIN()+
-						"\nCar Model:"+carPayment.getLoandata().getModel()+
-						"\nCar Price:"+carPayment.getLoandata().getPrincipal()+
-						"\nTotal No Of Month To Complete the payments:"+carPayment.getLoandata().getTermInMonths()+
-						"\nAPR:"+carPayment.getLoandata().getInterestRate()
-						+"\n\n"
-						);
-				monthlyPaymentHistory=carPayment.getMonthlyPaymentHistory();
-				//testing
-				System.out.println(monthlyPaymentHistory.size());
-				System.out.println(monthlyPaymentHistory);
-				Double total = 0.0;
-				System.out.println("Transaction Date   "+"Debit   "+"Credit    "+"Balance");
-
-				for (int z=0;z<monthlyPaymentHistory.size();z++) {
-					System.out.println(
-							"\n"+monthlyPaymentHistory.get(z).getTransactionDate()
-							+monthlyPaymentHistory.get(z).getDebit()
-							+monthlyPaymentHistory.get(z).getCredit()
-							+monthlyPaymentHistory.get(z).getBalance()
-							);
-					total = monthlyPaymentHistory.get(z).getTotalAmountPaid();  
-					total=monthlyPaymentHistory.get(z).getAmountPaid()+total;
-				}
-				System.out.println("Total Amount paid for the loan is:"+ total);
-				System.out.println("Remaining total Amount to be paid for the loan is:"+ (carPayment.getLoandata().getTotalLoanAmount()-total ));
-			}
-		}
-	}catch (java.io.EOFException e) {
-		System.out.println("Currently the customer has placed no payment");
-	}catch (java.lang.NullPointerException e1) {
-		System.out.println("Please enter the correct VIN or there are no payments for this car or the offer has not been accepted yet");
-		e1.printStackTrace();
-	}
-}
 }
 
