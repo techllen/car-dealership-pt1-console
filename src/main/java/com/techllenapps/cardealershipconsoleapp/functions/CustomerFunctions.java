@@ -58,35 +58,33 @@ public class CustomerFunctions{
 				if (checkCarPayMent() == false) {
 					System.out.println("\nThe is no any payment plan in our file system \n");
 					viewCarsThatIOwn();
-					CarPayment cp = new CarPayment();
 					System.out.println("\nPlease select the VIN of the car that you want to pay for from the list of accepted offers that you made as shown above");
 					//Buffered reader was used as alternative to input to the function because scanner could not work
 					BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 					String VIN = reader.readLine();
 					System.out.println("\nPlease enter the amount that you want to pay int $ e.g 200.75");
 					Double amountPaid = Double.parseDouble(reader.readLine());
-					cp=calculateMonthlyPayment(VIN);
-					addFirstCarPayment(cp);
-					updateCarPayment(cp,VIN);
-					cp=addPayment(VIN, amountPaid);
-					addFirstCarPayment(cp);
-					updateCarPayment(cp,VIN);
+					CarPayment cp1=calculateMonthlyPayment(VIN);
+					addFirstCarPayment(cp1);
+					updateCarListWithPayment(cp1,VIN);
+					CarPayment cp2=addPayment(VIN, amountPaid);
+					addFirstCarPayment(cp2);
+					updateCarListWithPayment(cp2,VIN);
 					System.out.println("\nThank you for paying for this car");
 				}else {
 					viewCarsThatIOwn();
-					CarPayment cp = new CarPayment();
 					System.out.println("\nPlease select the VIN of the car that you want to pay for from the list of accepted offers that you made as shown above");
 					//Buffered reader was used as alternative to input to the function because scanner could not work
 					BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 					String VIN = reader.readLine();
 					System.out.println("\nPlease enter the amount that you want to pay int $ e.g 200.75");
 					Double amountPaid = Double.parseDouble(reader.readLine());
-					cp=calculateMonthlyPayment(VIN);
-					addOtherCarPayMents(cp);
-					updateCarPayment(cp,VIN);
-					cp=addPayment(VIN, amountPaid);
-					addOtherCarPayMents(cp);
-					updateCarPayment(cp,VIN);
+					CarPayment cp3=calculateMonthlyPayment(VIN);
+					addOtherCarPayMents(cp3);
+					updateCarListWithPayment(cp3,VIN);
+					CarPayment cp4=addPayment(VIN, amountPaid);
+					addOtherCarPayMents(cp4);
+					updateCarListWithPayment(cp4,VIN);
 					System.out.println("\nThank you for paying for this car");
 				}
 				break;
@@ -392,7 +390,7 @@ public class CustomerFunctions{
 				if(carPaymentFromFile.getLoandata().getVIN().equals(VIN)) {
 					carPayment=carPaymentFromFile;
 					System.out.println("file car payment:" + carPayment);
-					previousPaymentHistory=carPayment.getMonthlyPaymentHistory();
+					monthlyPaymentHistory=carPayment.getMonthlyPaymentHistory();
 					//testing
 					System.out.println("the old hist is:" + previousPaymentHistory);
 					PaymentHistory paymentHistory = new PaymentHistory();
@@ -401,7 +399,8 @@ public class CustomerFunctions{
 					monthlyPaymentHistory.add(paymentHistory);
 					System.out.println("monthlyPaymentHistory:"+monthlyPaymentHistory);
 					//appending the new monthly payment history to the older one
-					monthlyPaymentHistory.addAll(previousPaymentHistory);
+					//monthlyPaymentHistory.addAll(previousPaymentHistory);
+					//
 					carPayment.setMonthlyPaymentHistory(monthlyPaymentHistory);
 					//						System.out.println(paymentHistory);
 					System.out.println(carPayment);
@@ -414,7 +413,7 @@ public class CustomerFunctions{
 	}
 
 
-	public static void updateCarPayment(CarPayment carPayment,String VIN) throws ClassNotFoundException, IOException {
+	public static void updateCarListWithPayment(CarPayment carPayment,String VIN) throws ClassNotFoundException, IOException {
 		ArrayList<Car> updatedCarListWithPayments = EmployeeFunctions.extractCarsFromFile();
 
 		for (Car car : updatedCarListWithPayments) {
@@ -424,6 +423,7 @@ public class CustomerFunctions{
 		}
 		EmployeeFunctions.updateCar(updatedCarListWithPayments);
 	}
+	
 
 	public static void addFirstCarPayment(CarPayment firstcarpayment) throws ClassNotFoundException, IOException{
 		ArrayList<CarPayment> carPaymentListToFile = new ArrayList<CarPayment>();
