@@ -416,7 +416,9 @@ public class CustomerFunctions {
 		ArrayList<PaymentHistory> monthlyPaymentHistory = new ArrayList<PaymentHistory>();
 		ArrayList<PaymentHistory> previousPaymentHistory = new ArrayList<PaymentHistory>();
 		ArrayList<CarPayment> carPaymentlistFromFile = extractCarPayMentsFromFile();
-		System.out.println(carPaymentlistFromFile);
+		System.out.println("**********"+carPaymentlistFromFile);
+		System.out.println("**********"+carPaymentlistFromFile.size());
+
 		PaymentHistory paymentHistory = new PaymentHistory();
 		paymentHistory.setCredit(amountPaid);
 		paymentHistory.setTransactionDate(today);
@@ -426,6 +428,7 @@ public class CustomerFunctions {
 				previousPaymentHistory = carPaymentsFromFile.getMonthlyPaymentHistory();
 				System.out.println(previousPaymentHistory);
 				monthlyPaymentHistory.addAll(previousPaymentHistory);
+				monthlyPaymentHistory=removeDuplicateMonthlyPaymentHistory(monthlyPaymentHistory);
 				System.out.println("monthlyPaymentHistory:" + monthlyPaymentHistory);
 				carPayment.setMonthlyPaymentHistory(monthlyPaymentHistory);
 				System.out.println(paymentHistory);
@@ -478,13 +481,24 @@ public class CustomerFunctions {
 
 	public static ArrayList<CarPayment> removeDuplicatesCarPayment(ArrayList<CarPayment> carPayMentList) {
 		ArrayList<CarPayment> noDuplicateCarPaymentList = new ArrayList<CarPayment>();
-		for (CarPayment carpayment : noDuplicateCarPaymentList) {
+		for (CarPayment carpayment : carPayMentList) {
 			if (!noDuplicateCarPaymentList.contains(carpayment)) {
 				noDuplicateCarPaymentList.add(carpayment);
 			}
 		}
 		return noDuplicateCarPaymentList;
 	}
+	
+	public static ArrayList<PaymentHistory> removeDuplicateMonthlyPaymentHistory(ArrayList<PaymentHistory> monthlyPaymentHistory) {
+		ArrayList<PaymentHistory> noDuplicateCarPaymentList = new ArrayList<PaymentHistory>();
+		for (PaymentHistory paymentHistory : monthlyPaymentHistory) {
+			if (!noDuplicateCarPaymentList.contains(paymentHistory)) {
+				noDuplicateCarPaymentList.add(paymentHistory);
+			}
+		}
+		return noDuplicateCarPaymentList;
+	}
+	
 
 	// checking of the file is empty
 	public static boolean checkCarPayMent() {

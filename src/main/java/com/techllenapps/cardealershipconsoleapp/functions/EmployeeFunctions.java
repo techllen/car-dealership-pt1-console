@@ -199,7 +199,7 @@ public class EmployeeFunctions extends Car implements Serializable{
 		return carAvailable;
 	}
 
-	public static ArrayList<Car> removeDuplicatesCars(ArrayList<Car> userList)
+	public static ArrayList<Car> removeDuplicatesCars(ArrayList<Car> carList)
 	{
 		ArrayList<Car> noDuplicateCarList = new ArrayList<Car>();
 		for (Car Car : carList) {
